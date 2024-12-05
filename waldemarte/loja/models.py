@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here. -> informacoes que vamos armazenar no BD
 
-# TODO : creio que alguns campos precisam ter certas constraints, precisa ser ajustado
+# TODO : creio que alguns campos precisam ter certas constraints, precisa ser ajustado, exemplo not empty
 # TODO :por default todos os campos sao NOT NULL, alguns precisam ser nullable, corrigir conforme necessario
 
 # Usuario abstrato, serve como base do vendedor e comprador
