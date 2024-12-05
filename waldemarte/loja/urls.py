@@ -5,6 +5,18 @@ from . import views
 urlpatterns = [
     # TODO: index
     path("", views.index),
-    path("comprador/salvar/<nome>/<email>/<telefone>/<cpf>/<senha>", views.save_comprador),
+
+    # Salva um comprador na base de dados
+    # Body do request em json -> 
+    # {
+    #   "nome" : <nome>,
+    #   "email" : <email>,
+    #   "telefone" : <telefone>,
+    #   "cpf" : <cpf>,
+    #   "senha" : <senha>
+    #}
+    path("comprador/salvar", views.criar_comprador),
+
+    # Retorna compradores em uma string, apenas para debug
     path("comprador/all", views.return_compradores)
 ]

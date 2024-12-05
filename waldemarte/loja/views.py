@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
+from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
+import json
 
 from .models import Comprador
 
@@ -11,11 +11,18 @@ from .models import Comprador
 def index(request):
     pass
 
-# TODO : implementar de forma mais elegante, talvez de com json
-def save_comprador(request, nome, email, telefone, cpf, senha):
-    user = Comprador(nome=nome, email=email, telefone=telefone, cpf=cpf, senha=senha)
+
+def criar_comprador(request : HttpRequest):
+    args = json.loads(request.body) 
+    try:
+        user = Comprador(**args)
+    except Exception as e:
+        return HttpResponseBadRequest("Incorrect json formatting")
     user.save()
     return HttpResponse("Sucess")
+
+ 
+
 
 
 def return_compradores(request):
