@@ -62,6 +62,27 @@ urlpatterns = [
     #     }
 
     # }
-    path("comprador/add-cartao", views.comprador_add_cartao)
+    path("comprador/add-cartao", views.comprador_add_cartao),
 
-]
+    # Adiciona produto associado a um vendedor
+    # Json -> 
+    # {
+        # "id" : <vendedor_id>,
+        # "produto" : {
+        #     "nome" : <nome>,
+        #     "preco" : <preco>,
+        #     "especificacoes" : <specs>,
+        #     "estoque" : <init_estoque>
+        # },
+        # "opcoes" :[<opcoes>]    
+    # }
+    path("vendedor/add-produto", views.add_produto),
+
+
+    # TODO : testar
+    # Retorna uma busca por produtos, limitada por nome e preco
+    # Json (request) -> {"query", "preco_lim_inf", "preco_lim_sup"}
+    # Json (response) -> {"nome", "preco", "opcoes" : [lista de strings], "especificacoes", "estoque", "vendedor"}
+    path("produtos/busca")
+
+]   

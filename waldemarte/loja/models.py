@@ -1,5 +1,6 @@
 from django.db import models
 
+import json
 # Create your models here. -> informacoes que vamos armazenar no BD
 
 # TODO : creio que alguns campos precisam ter certas constraints, precisa ser ajustado, exemplo not empty
@@ -63,11 +64,26 @@ class Produto(models.Model):
     estoque = models.IntegerField()
     vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE, default=1)
 
+    def asdict(self):
+        return {
+            "nome" : self.nome,
+            "preco" : self.preco,
+            "opcoes" : [str(op) for op in self.opcao_set],
+            "especificacoes" : self.especificacoes,
+            "estoque" : self.estoque,
+            "vendedor" : self.vendedor.nome
+        }
+    def to_json(self):
+        return json.dumps(self.asdict())
+
 # Poduto contem uma lista de opcoes, o melhor jeito de implementa-la eh com uma table separada (Many to One)
 class Opcao(models.Model):
     opcao = models.CharField(max_length=254)
     # Many to One : lista de opcoes do produto
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, default=1)
+    
+    def __str__(self):
+        return self.opcao
 
 # Avaliacao do produto
 class Avaliacao(models.Model):

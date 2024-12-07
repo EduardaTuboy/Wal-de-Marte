@@ -53,6 +53,37 @@ def criar_vendedor(request : HttpRequest):
     user.save()
     return HttpResponse()
 
+def add_produto(request : HttpRequest):
+    args = json.loads(request.body)
+    try:
+        owner = Vendedor.objects.get(args["id"])
+        produto = Produto(vendedor = owner, **args["produto"])
+        produto.save()
+        opcoes = [Opcao(opcao=op, produto=produto) for op in args["opcoes"]]
+        for op in opcoes:
+            op.save()
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest()
+    return HttpResponse()
+
+
+def query_produtos(request : HttpRequest):
+    args = json.loads(request.body)
+    produtos = []
+    try:
+        produtos = Produto.objects.filter(
+            nome__icontains=args["query"], 
+            preco__lte=args["preco_lim_inf"],
+            preco__gte=args["preco_lim_sup"]                
+            )
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest()
+    produtos_json = [p.to_json() for p in produtos]
+    return HttpResponse(produtos_json, content_type="application/json")
+    
+
 
 def return_compradores(request):
     return HttpResponse([str(c) for c in Comprador.objects.all()])
