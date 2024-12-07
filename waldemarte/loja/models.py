@@ -1,5 +1,5 @@
 from django.db import models
-
+from .classes.frete import calcula_frete
 import json
 # Create your models here. -> informacoes que vamos armazenar no BD
 
@@ -66,6 +66,7 @@ class Produto(models.Model):
 
     def asdict(self):
         return {
+            "id" : self.id,
             "nome" : self.nome,
             "preco" : self.preco,
             "opcoes" : [str(op) for op in self.opcao_set.all()],
@@ -110,7 +111,15 @@ class CarrinhoDeCompras(models.Model):
     # TODO : implementar contagem de produtos, nao testei para entender se a 
     # relacao many to many permite repeticao, se sim, descartar esse todo
     comprador =  models.ForeignKey(Comprador, on_delete=models.CASCADE, default=1)
-    preco_final = models.FloatField()
+    preco_final = models.FloatField(default=0.0)
+
+    def to_json(self):
+        return json.dumps({
+            "user_id" : self.comprador_id,
+            "produtos" : [p.asdict() for p in self.produtos.all()],
+            "preco_final" : self.preco_final,
+            "frete" : calcula_frete(self)
+        })
 
 
 class Notificacao(models.Model):

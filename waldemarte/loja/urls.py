@@ -83,6 +83,24 @@ urlpatterns = [
     # Retorna uma busca por produtos, limitada por nome e preco
     # Json (request) -> {"query", "preco_lim_inf", "preco_lim_sup"}
     # Json (response) -> {"nome", "preco", "opcoes" : [lista de strings], "especificacoes", "estoque", "vendedor"}
-    path("query-produtos", views.query_produtos)
+    path("query-produtos", views.query_produtos),
+
+    # Retorna o carrinho de compras de um usuario
+    # Json (request) -> {"user_id"}
+    # Json (response) -> {
+    #   "user_id", "preco_final", "frete",
+    #   "produtos" : [{"nome", "preco", "opcoes" : [lista de strings], "especificacoes", "estoque", "vendedor"}]
+    # }
+    path("cart/get", views.get_cart),
+    # Adiciona um produto ao carrinho do usuario
+    # Json (request) -> {"user_id", "produto_id"}
+    # Json (responde) -> {"novo_frete", "novo_preco"}
+    path("cart/add", views.add_to_cart),
+
+    # Remove um produto do carrinho do usuario
+    # Json (request) -> {"user_id", "produto_id"}
+    # Json (responde) -> {"novo_frete", "novo_preco"}
+    path("cart/remove", views.remove_from_cart)
+
 
 ]   

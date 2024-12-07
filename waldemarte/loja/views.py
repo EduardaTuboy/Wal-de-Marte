@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
+from .classes.frete import calcula_frete
 import json
 
 from .models import *
 
 
 # Create your views here. -> interacao que o usuario tem no frontend vem pra ca
+
+
+# Documentacao dos inputs e outputs das funcoes estao no urls.py
+
 
 # TODO : index
 def index(request):
@@ -83,6 +88,50 @@ def query_produtos(request : HttpRequest):
     produtos_json = [p.to_json() for p in produtos]
     return HttpResponse(produtos_json, content_type="application/json")
     
+
+
+
+def get_cart(request : HttpRequest):
+    return HttpResponse(CarrinhoDeCompras.objects.get(comprador_id=json.loads(request.body)["user_id"]).to_json(),
+                        content_type="application/json")
+
+def add_to_cart(request : HttpRequest):
+    args = json.loads(request.body)
+    user = Comprador.objects.get(pk=args["user_id"])
+    new_produto = Produto.objects.get(pk=args["produto_id"])
+    cart = None
+    try:
+        cart = CarrinhoDeCompras.objects.get(comprador_id=args["user_id"])
+    except CarrinhoDeCompras.DoesNotExist as e:
+        cart = CarrinhoDeCompras(comprador = user)
+    cart.save()
+    cart.produtos.add(new_produto)
+    cart.preco_final += new_produto.preco
+    cart.save()
+    return HttpResponse(json.dumps({"novo_frete" : calcula_frete(cart),
+                                    "novo_preco" : cart.preco_final
+                                    }),
+                                    content_type="application/json")
+
+def remove_from_cart(request : HttpRequest):
+    args = json.loads(request.body)
+    user = Comprador.objects.get(pk=args["user_id"])
+    produto = Produto.objects.get(pk=args["produto_id"])
+    cart = CarrinhoDeCompras.objects.get(comprador_id=args["user_id"]) 
+    cart.produtos.remove(produto)
+    produto.carrinhodecompras_set.remove(cart)
+    cart.preco_final -= produto.preco
+    cart.save()
+    produto.save()
+    return HttpResponse(json.dumps({"novo_frete" : calcula_frete(cart),
+                                    "novo_preco" : cart.preco_final
+                                    }),
+                                    content_type="application/json")
+
+
+    
+
+
 
 
 def return_compradores(request):
