@@ -68,7 +68,7 @@ class Produto(models.Model):
         return {
             "nome" : self.nome,
             "preco" : self.preco,
-            "opcoes" : [str(op) for op in self.opcao_set],
+            "opcoes" : [str(op) for op in self.opcao_set.all()],
             "especificacoes" : self.especificacoes,
             "estoque" : self.estoque,
             "vendedor" : self.vendedor.nome

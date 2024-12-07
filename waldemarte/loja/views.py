@@ -56,7 +56,7 @@ def criar_vendedor(request : HttpRequest):
 def add_produto(request : HttpRequest):
     args = json.loads(request.body)
     try:
-        owner = Vendedor.objects.get(args["id"])
+        owner = Vendedor.objects.get(pk=args["id"])
         produto = Produto(vendedor = owner, **args["produto"])
         produto.save()
         opcoes = [Opcao(opcao=op, produto=produto) for op in args["opcoes"]]
@@ -74,8 +74,8 @@ def query_produtos(request : HttpRequest):
     try:
         produtos = Produto.objects.filter(
             nome__icontains=args["query"], 
-            preco__lte=args["preco_lim_inf"],
-            preco__gte=args["preco_lim_sup"]                
+            preco__gte=args["preco_lim_inf"],
+            preco__lte=args["preco_lim_sup"]                
             )
     except Exception as e:
         print(e)

@@ -15,10 +15,10 @@ urlpatterns = [
     #   "cpf" : <cpf>,
     #   "senha" : <senha>
     #}
-    path("comprador/salvar", views.criar_comprador),
+    path("user/save-comprador", views.criar_comprador),
 
     # Retorna compradores em uma string, apenas para debug
-    path("comprador/all", views.return_compradores),
+    path("user/comprador-all", views.return_compradores),
 
 
     # Salva um vendedor na base de dados
@@ -33,7 +33,7 @@ urlpatterns = [
     #   "banco_conta" : <conta>,
     #   "banco_agencia" : <agencia>
     #}
-    path("vendedor/salvar", views.criar_vendedor),
+    path("user/save-vendedor", views.criar_vendedor),
 
     # Salva o endereco para um comprador pelo ID
     # Body do request em json -> 
@@ -49,7 +49,7 @@ urlpatterns = [
     #         "complemento" : <complemento>
     #     }
     # }
-    path("comprador/set-endereco", views.comprador_set_endereco),
+    path("user/set-endereco-comprador", views.comprador_set_endereco),
 
 
     # Salva um cartao associado a um comprador
@@ -62,7 +62,7 @@ urlpatterns = [
     #     }
 
     # }
-    path("comprador/add-cartao", views.comprador_add_cartao),
+    path("user/add-cartao-comprador", views.comprador_add_cartao),
 
     # Adiciona produto associado a um vendedor
     # Json -> 
@@ -76,13 +76,13 @@ urlpatterns = [
         # },
         # "opcoes" :[<opcoes>]    
     # }
-    path("vendedor/add-produto", views.add_produto),
+    path("user/add-produto", views.add_produto),
 
 
-    # TODO : testar
+
     # Retorna uma busca por produtos, limitada por nome e preco
     # Json (request) -> {"query", "preco_lim_inf", "preco_lim_sup"}
     # Json (response) -> {"nome", "preco", "opcoes" : [lista de strings], "especificacoes", "estoque", "vendedor"}
-    path("produtos/busca")
+    path("query-produtos", views.query_produtos)
 
 ]   
