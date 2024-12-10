@@ -17,6 +17,15 @@ urlpatterns = [
     #}
     path("user/save-comprador", views.criar_comprador),
 
+    # Retorna comprador por id
+    # Json (response) -> {"nome", "email", "telefone", "cpf", "endereco" : []}
+    path("user/get-comprador/<int:id>", views.get_comprador),
+    
+    # Altera dados de comprador por id (nao altera endereco ou cartoes)
+    # Json (request) -> {"id", "fields" : {<nome_do_campo>}}
+    # Siga o modelo em user/save-comprador para nome do campo
+    path("user/comprador-edit", views.update_comprador),
+
     # Retorna compradores em uma string, apenas para debug
     path("user/comprador-all", views.return_compradores),
 
@@ -34,6 +43,12 @@ urlpatterns = [
     #   "banco_agencia" : <agencia>
     #}
     path("user/save-vendedor", views.criar_vendedor),
+
+    # Edita vendedor, mesma coisa do comprador-edit
+    path("user/vendedor-edit", views.update_vendedor),
+
+    # Retorna um vendedor por id
+    path("user/get-vendedor/<int:id>", views.get_vendedor),
 
     # Salva o endereco para um comprador pelo ID
     # Body do request em json -> 
@@ -76,14 +91,19 @@ urlpatterns = [
         # },
         # "opcoes" :[<opcoes>]    
     # }
-    path("user/add-produto", views.add_produto),
+    path("produto/add-produto", views.add_produto),
 
+    # Funciona igual os de editar usuario
+    # Porem "opcoes" dentro de "fileds" deve ser uma lista
+    path("produto/produto-edit", views.update_produto),
 
+    # Retorna um produto por id
+    path("produto/get-produto/<int:id>", views.get_produto),
 
     # Retorna uma busca por produtos, limitada por nome e preco
     # Json (request) -> {"query", "preco_lim_inf", "preco_lim_sup"}
     # Json (response) -> {"nome", "preco", "opcoes" : [lista de strings], "especificacoes", "estoque", "vendedor"}
-    path("query-produtos", views.query_produtos),
+    path("produto/query-produtos", views.query_produtos),
 
     # Retorna o carrinho de compras de um usuario
     # Json (request) -> {"user_id"}

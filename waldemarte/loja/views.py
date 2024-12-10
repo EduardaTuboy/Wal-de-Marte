@@ -48,6 +48,26 @@ def comprador_add_cartao(request : HttpRequest):
     return HttpResponse()
         
 
+def get_comprador(request : HttpRequest, id):
+    try:
+        user = Comprador.objects.get(pk=id)
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest()
+    return HttpResponse(json.dumps(user.asdict), content_type="application/json")
+
+def update_comprador(request : HttpRequest):
+    args = json.loads(request.body)
+    try:
+        updated_user = Comprador.objects.get(pk=args["id"])
+        for field, value in args["fields"].items():
+            setattr(updated_user, field, value)
+        updated_user.save()
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest
+    return HttpResponse()
+
 def criar_vendedor(request : HttpRequest):
     args = json.loads(request.body)
     try:
@@ -57,6 +77,27 @@ def criar_vendedor(request : HttpRequest):
         return HttpResponseBadRequest("Incorrect json formatting")
     user.save()
     return HttpResponse()
+
+def update_vendedor(request : HttpRequest):
+    args = json.loads(request.body)
+    try:
+        updated_user = Vendedor.objects.get(pk=args["id"])
+        for field, value in args["fields"].items():
+            setattr(updated_user, field, value)
+        updated_user.save()
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest
+    return HttpResponse()
+    
+
+def get_comprador(request : HttpRequest, id):
+    try:
+        user = Vendedor.objects.get(pk=id)
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest()
+    return HttpResponse(json.dumps(user.asdict), content_type="application/json")
 
 def add_produto(request : HttpRequest):
     args = json.loads(request.body)
@@ -71,6 +112,31 @@ def add_produto(request : HttpRequest):
         print(e)
         return HttpResponseBadRequest()
     return HttpResponse()
+
+def get_produto(request : HttpRequest, id):
+    try: 
+        prod = Produto.objects.get(pk=id)
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest()
+    return HttpResponse(json.dumps(prod.asdict()), content_type="application/json")
+    
+def update_produto(request : HttpRequest):
+    args = json.loads(request.body)
+    try:
+        updated_produto = Produto.objects.get(pk=args["id"])
+        for field, value in args["fields"].items():
+            if field != "opcoes":
+                setattr(updated_produto, field, value)
+        for op in args["fields"]["opcoes"]:
+            updated_produto.opcao_set.add(Opcao(opcao=op))
+        updated_produto.save()
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest
+    return HttpResponse()
+    
+
 
 
 def query_produtos(request : HttpRequest):

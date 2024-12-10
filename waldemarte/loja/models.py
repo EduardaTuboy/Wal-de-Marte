@@ -5,6 +5,8 @@ import json
 
 # TODO : creio que alguns campos precisam ter certas constraints, precisa ser ajustado, exemplo not empty
 # TODO :por default todos os campos sao NOT NULL, alguns precisam ser nullable, corrigir conforme necessario
+# TODO : implementar metodos de asdict() ou to_json() para as classe, para poder mandar via http
+
 
 # Usuario abstrato, serve como base do vendedor e comprador
 class AbstractUsuario(models.Model):
@@ -17,6 +19,14 @@ class AbstractUsuario(models.Model):
     class Meta:
         abstract = True
 
+    def asdict(self):
+        return {
+            "nome" : self.nome,
+            "email" : self.email,
+            "telefone" : self.telefone,
+            "cpf" : self.cpf
+        }
+
 # Classe Vendedor
 class Vendedor(AbstractUsuario):
     cnpj = models.CharField(max_length=254, null=True)
@@ -24,7 +34,11 @@ class Vendedor(AbstractUsuario):
     banco_agencia = models.CharField(max_length=254, null=True)
     banco_conta = models.CharField(max_length=254, null=True)
 
-
+    def asdict(self):
+        return {
+           "cnpj" : self.cnpj ,
+           "id" : self.id
+        } + super.asdict()
 # Classe comprador
 class Comprador(AbstractUsuario):
     # Lista de cartoes : Implementado como Foreign Key (One to Many)
@@ -32,6 +46,13 @@ class Comprador(AbstractUsuario):
     pass
     def __str__(self):
         return f"{self.nome}|{self.email}|{self.telefone}|{self.cpf}|{self.senha}"
+
+    def asdict(self):
+        return super().asdict() + {
+            "id" : self.id,
+            "endereco" : [end.asdict() for end in self.endereco_set]
+            }
+
 
 # Classe do cartao, para o comprador
 class Cartao(models.Model):
@@ -51,6 +72,17 @@ class Endereco(models.Model):
     complemento = models.CharField(max_length=254)
     # Many to One : enderecoes cadastrados para comprador
     comprador = models.ForeignKey(Comprador, on_delete=models.CASCADE, default=1)
+
+    def asdict(self):
+        return {
+            "cep" : self.cep,
+            "rua" : self.rua,
+            "bairro" : self.bairro,
+            "cidade" : self.cidade,
+            "estado" : self.estado,
+            "numero" : self.numero,
+            "complemento" : self.complemento,
+        }
 
 
 
