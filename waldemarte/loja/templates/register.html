@@ -8,32 +8,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
 
 </head>
 <body>
-    <form method="post" action="{% url 'register' %}">
-        {% csrf_token %}
-        <label for="username">Nome de Usuário</label>
-        <input type="text" name="username" id="username" required>
-        
-        <label for="email">E-mail</label>
-        <input type="email" name="email" id="email" required>
-        
-        <label for="password">Senha</label>
-        <input type="password" name="password" id="password" required>
-        
-        <label for="confirm_password">Confirmar Senha</label>
-        <input type="password" name="confirm_password" id="confirm_password" required>
-        
-        <button type="submit">Registrar</button>
-    </form>
-    <a href="{% url 'login' %}">Já tem uma conta? Faça login</a>
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    <header>
+        <div>
+            <h1>Wal de marte</h1>
+        </div>
+    </header>
+    <div class="content">
+
+        <div class="container">
+            <div class="infos">
+                <h2>Registre-se para começar a comprar</h2>
+
+                <h5>
+                    Digite seu melhor 
+                    e-mail e crie uma senha
+                </h3>
+
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="form-div">
+                <form method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <label for="username">Nome de Usuário</label>
+                    <input type="text" name="username" id="username" required>
+                    
+                    <label for="email">E-mail</label>
+                    <input type="email" name="email" id="email" required>
+                    
+                    <label for="password">Senha</label>
+                    <input type="password" name="password" id="password" required>
+                    
+                    <label for="confirm_password">Confirmar Senha</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required>
+                    
+                    <button type="submit">REGISTRAR-SE</button>
+                    <a href="{% url 'login' %}">Já tem uma conta? Faça login</a>
+                </form>
+            </div>
+        </div>
+    </div>  
 </body>
 </html>

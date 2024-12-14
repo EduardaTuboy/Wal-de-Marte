@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+25&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --cor-primaria: #429A36;
+    --cor-secundaria: #79cA6f;
+    --cor-preto: #0d0d0d;
+    --cor-branco: #fff;
+    --cor-texto: #171717;
+    --fonte-texto: relaway, sans-serif;
+    --fonte-logo: 'Jersey 25', cursive;
+}
+*{
+    margin: 0;
+}

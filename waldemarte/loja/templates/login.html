@@ -8,27 +8,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 
 </head>
 <body>
-    
-    <form action="{% url 'login' %}" method="post"> 
-        {% csrf_token %}:
+    <header>
+        <div>
+            <h1>Wal de marte</h1>
+        </div>
+    </header>
+    <div class="content">
 
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
-        <label for="senha">Senha</label>
-        <input type="password" name="senha" id="senha" required>
-        <button type="submit">Entrar</button>
-    </form>
-    <a href="{% url 'register' %}">Nao tem uma conta? Registre-se</a>
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+        <div class="container">
+            <div class="infos">
+                <h2>Digite seu e-mail e senha para iniciar a seção</h2>
+    
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+    
+            
+            </div>
+    
+            <div class="form-div">
+                <form action="{% url 'login' %}" method="post"> 
+                    {% csrf_token %}
+                    <label for="email">E-mail</label>
+                    <input type="email" name="email" id="email" required>
+                    <label for="senha">Senha</label>
+                    <input type="password" name="senha" id="senha" required>
+                    <button type="submit">ENTRAR</button>
+                    <a href="{% url 'register' %}">Nao tem uma conta? Registre-se</a>
+                </form>
+    
+            </div>
+    
+        </div>
+    </div>
     
 </body>
 </html>
