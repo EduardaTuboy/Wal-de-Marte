@@ -4,7 +4,14 @@ from . import views
 
 urlpatterns = [
     # TODO: index
-    path("", views.index),
+    path("", views.index, name="index"),  # Página inicial
+
+
+    #Página de login
+    path("login/", views.login, name="login"),            
+
+
+    path("register/", views.register, name="register"),
 
     # Salva um comprador na base de dados
     # Body do request em json -> 
@@ -98,7 +105,7 @@ urlpatterns = [
     path("produto/produto-edit", views.update_produto),
 
     # Retorna um produto por id
-    path("produto/get-produto/<int:id>", views.get_produto),
+    path("produto/<int:id>", views.get_produto),
 
     # Retorna uma busca por produtos, limitada por nome e preco
     # Json (request) -> {"query", "preco_lim_inf", "preco_lim_sup"}

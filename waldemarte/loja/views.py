@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
 from .classes.frete import calcula_frete
+from django.contrib import messages
+
 import json
 
 from .models import *
@@ -12,9 +14,50 @@ from .models import *
 # Documentacao dos inputs e outputs das funcoes estao no urls.py
 
 
-# TODO : index
+# TODO : index,
+#        fazer autenticaçao de senha
 def index(request):
+    # verificar se o usuario esta logado
+
+
+    produtos = query_produtos(request)
+    context = {
+        "produtos" : produtos
+    }
+
+    return render(request, "index.html", context)
     pass
+
+def login(request):
+    if request.method == "POST":
+        email = request.POST["email"]
+        senha = request.POST["senha"]
+         
+        #user = authenticate(email=email, senha=senha)
+        user = {} # usuario dummy
+
+        if user is not None:
+            #login(request, user)
+            return redirect("/")
+        else:
+            messages.error(request, "Login invalido")
+            return render(request, "login.html")
+    # se a requisiçao for GET, retorna a pagina de login
+    return render(request, "login.html")
+
+
+def register(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+        
+        if password != confirm_password:
+            messages.error(request, "As senhas não coincidem.")
+            return render(request, "register.html")
+
+        # Criaçao o usuario (TODO)
+    return render(request, "register.html")
 
 # TODO : verificacao mais robusta nas funcoes de criacao
 def criar_comprador(request : HttpRequest):
@@ -91,7 +134,7 @@ def update_vendedor(request : HttpRequest):
     return HttpResponse()
     
 
-def get_comprador(request : HttpRequest, id):
+def get_vendedor(request : HttpRequest, id):
     try:
         user = Vendedor.objects.get(pk=id)
     except Exception as e:
@@ -116,11 +159,20 @@ def add_produto(request : HttpRequest):
 def get_produto(request : HttpRequest, id):
     try: 
         prod = Produto.objects.get(pk=id)
+
+
+        if request.headers.get("Content-Type") == "application/json":
+            # Retorna o produto como JSON se for chamado via API
+            return HttpResponse(json.dumps(prod.asdict()), content_type="application/json")
+
+        # Se não for JSON, renderiza um template HTML
+        return render(request, "produto.html", {"produto": prod})
+
     except Exception as e:
         print(e)
         return HttpResponseBadRequest()
-    return HttpResponse(json.dumps(prod.asdict()), content_type="application/json")
-    
+
+
 def update_produto(request : HttpRequest):
     args = json.loads(request.body)
     try:
@@ -139,21 +191,25 @@ def update_produto(request : HttpRequest):
 
 
 
-def query_produtos(request : HttpRequest):
-    args = json.loads(request.body)
+def query_produtos(request: HttpRequest):
+    args = json.loads(request.body) if request.method == "POST" else {}
     produtos = []
     try:
+        # Se argumentos existirem, faz a busca
         produtos = Produto.objects.filter(
-            nome__icontains=args["query"], 
-            preco__gte=args["preco_lim_inf"],
-            preco__lte=args["preco_lim_sup"]                
-            )
+            nome__icontains=args.get("query", ""), 
+            preco__gte=args.get("preco_lim_inf", 0),
+            preco__lte=args.get("preco_lim_sup", 999999)
+        )
     except Exception as e:
         print(e)
-        return HttpResponseBadRequest()
-    produtos_json = [p.to_json() for p in produtos]
-    return HttpResponse(produtos_json, content_type="application/json")
-    
+        if request.method == "POST":
+            return HttpResponseBadRequest("Invalid input")
+    if request.method == "POST":
+        produtos_json = [p.to_json() for p in produtos]
+        return HttpResponse(json.dumps(produtos_json), content_type="application/json")
+    return produtos  # Retorna os objetos diretamente se chamado internamente
+
 
 
 

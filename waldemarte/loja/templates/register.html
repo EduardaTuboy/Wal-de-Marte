@@ -1,0 +1,39 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+<body>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <label for="username">Nome de Usuário</label>
+        <input type="text" name="username" id="username" required>
+        
+        <label for="email">E-mail</label>
+        <input type="email" name="email" id="email" required>
+        
+        <label for="password">Senha</label>
+        <input type="password" name="password" id="password" required>
+        
+        <label for="confirm_password">Confirmar Senha</label>
+        <input type="password" name="confirm_password" id="confirm_password" required>
+        
+        <button type="submit">Registrar</button>
+    </form>
+    <a href="{% url 'login' %}">Já tem uma conta? Faça login</a>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
