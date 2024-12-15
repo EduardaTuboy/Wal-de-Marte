@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
 from .classes.frete import calcula_frete
 from django.contrib import messages
-
+from django.contrib.auth import authenticate
 import json
 
 import loja.classes.notificacoes as notif
@@ -17,21 +17,22 @@ from .models import *
 
 # TODO : index,
 #        fazer autenticaçao de senha
-def index(request):
+def index(request : HttpRequest):
     query = request.GET.get("query", "")  # Obtém o termo de busca
     produtos = Produto.objects.all()  # Produtos padrão
-
-    # Se houver uma busca, filtra os produtos
+    user = request.session.get("user", None)     # Se houver uma busca, filtra os produtos
     if query:
         produtos = produtos.filter(nome__icontains=query)
 
     context = {
         "produtos": produtos,
+        "user" : user, # se autenticado eh o user, senao eh none,
         "query": query  # Passa o termo de busca para reutilizar no template
     }
     return render(request, "index.html", context)
+    
 
-def login(request):
+def login(request : HttpRequest):
     if request.method == "POST":
         email = request.POST["email"]
         senha = request.POST["senha"]
@@ -41,7 +42,11 @@ def login(request):
 
         if user is not None:
             #login(request, user)
-            return redirect("/")
+            context = {
+                "user" : user.id
+            }
+            request.session["user"] = user
+            return render(request ,"base.html", context)
         else:
             messages.error(request, "Login invalido")
             return render(request, "login.html")
@@ -276,5 +281,6 @@ def comprar_carrinho(request, user_id):
     for t in transacoes:
         notif.notificarCompraComprador(t)
         notif.notificarCompraVendedor(t)
+    return render(request, "base.html")
 
 
