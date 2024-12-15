@@ -5,6 +5,7 @@ from django.contrib import messages
 
 import json
 
+import loja.classes.notificacoes as notif
 from .models import *
 
 
@@ -258,3 +259,11 @@ def remove_from_cart(request : HttpRequest):
 
 def return_compradores(request):
     return HttpResponse([str(c) for c in Comprador.objects.all()])
+
+
+
+def comprar_carrinho(request, user_id):
+    carrinho = CarrinhoDeCompras.objects.filter(comprador_id = user_id)[0]
+    Transacao.registrar_carrinho(carrinho)
+    carrinho.clear()
+

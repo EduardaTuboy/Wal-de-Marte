@@ -130,12 +130,7 @@ class Avaliacao(models.Model):
     data = models.DateField(auto_now_add=True)
 
 
-# Registro de vendas, referencia vendedor produto e comprador como foreign Key
-class Transacao(models.Model):
-    comprador = models.ForeignKey(Comprador, null=True,  on_delete=models.SET_NULL)
-    produto = models.ForeignKey(Produto, null=True, on_delete=models.SET_NULL)
-    preco = models.FloatField()
-    vendedor = models.ForeignKey(Vendedor, null=True, on_delete=models.SET_NULL)
+    
 
 class CarrinhoDeCompras(models.Model):
     # Relacao Many to Many para incluir lista de produtos
@@ -152,6 +147,34 @@ class CarrinhoDeCompras(models.Model):
             "preco_final" : self.preco_final,
             "frete" : calcula_frete(self)
         })
+    
+    def clear(self):
+        for prod in self.produtos.all():
+            self.produtos.remove(prod)
+            prod.carrinhodecompras_set.remove(self)
+            prod.save()
+        self.save()
+
+
+# Registro de vendas, referencia vendedor produto e comprador como foreign Key
+class Transacao(models.Model):
+    comprador = models.ForeignKey(Comprador, null=True,  on_delete=models.SET_NULL)
+    produto = models.ForeignKey(Produto, null=True, on_delete=models.SET_NULL)
+    preco = models.FloatField()
+    vendedor = models.ForeignKey(Vendedor, null=True, on_delete=models.SET_NULL)
+
+
+
+    @staticmethod
+    def registrar_carrinho(carrinho : CarrinhoDeCompras):
+        for prod in carrinho.produtos.all():
+            Transacao(
+                comprador_id=carrinho.comprador_id,
+                vendedor_id=prod.vendedor_id,
+                produto_id=prod.id,
+                preco=prod.preco
+            ).save()
+            
 
 
 class Notificacao(models.Model):
