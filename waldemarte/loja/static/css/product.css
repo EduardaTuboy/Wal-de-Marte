@@ -1,0 +1,135 @@
+/* produto.css */
+
+.content-product {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--cor-primaria);
+    display: flex;
+    justify-content: center;
+    padding: 1rem; 
+    gap: 2rem;
+    font-family: var(--fonte-texto);
+}
+
+.image-gallery {
+    width: 50%;
+    background-color: var(--cor-branco);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 1rem;
+    height: 60%;
+}
+
+.thumbnail-images {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.thumbnail {
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.thumbnail:hover {
+    transform: scale(1.1);
+}
+
+.main-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.main-image img {
+    width: auto;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.product-info {
+    width: 30%;
+    background-color: var(--cor-branco);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.product-info h3 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 300;
+}
+
+.product-info .subtitle {
+    font-size: 1rem;
+    color: var(--cor-texto);
+    font-weight: 600;
+}
+
+.product-info .subtext{
+    font-size: 1rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.product-info .subtext-price{
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 800;
+}
+
+.product-info .options {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.product-info .option{
+    padding: 0.9rem;
+    background-color: #1D1F22;
+    border: 1px solid #1D1F22;
+    color: #fff;
+    user-select: none;
+}
+
+.product-info .option-active{
+    background-color: #fff;
+    padding: 0.9rem;
+    color: var(--cor-texto);
+    user-select: none;
+}
+
+.product-info .buyButton {
+    background-color: var(--cor-preto);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.product-info button {
+    background-color: var(--cor-primaria);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+
+.product-info .cartButton:hover {
+    background-color: va#1D1F22; 
+}

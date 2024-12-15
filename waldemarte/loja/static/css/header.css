@@ -42,6 +42,7 @@ header nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
 }
 
@@ -49,7 +50,10 @@ header nav a {
     text-decoration: none;
     color: var(--cor-branco);
     padding: 5px 10px; 
+    display: flex;
+    flex-direction: row;
 }
+
 
 header nav a h1 {
     font-family: var(--fonte-logo);

@@ -20,6 +20,13 @@ header a{
     color: var(--cor-branco);
 }
 
+header a div{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
 
 header h1{
     font-family: var(--fonte-logo);

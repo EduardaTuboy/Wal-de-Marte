@@ -5,15 +5,57 @@
 {% block title %}Página Principal{% endblock %}
 
 {% block content %}
+    <div class="content-product">
+        <div class="image-gallery">
+            <div class="thumbnail-images">
+                {% for imagem in produto.imagemproduto_set.all %}
+                <img class="thumbnail" src="{{ imagem }}" alt="{{ produto.nome }}" onclick="changeImage('{{ imagem }}')">
+                {% endfor %}
+            </div>
+            <div class="main-image">
+                <img id="mainImage" src="{{ produto.imagemproduto_set.all.first }}" alt="{{ produto.nome }}">
+            </div>
+        </div>
+        <div class="product-info">
+            <h3>{{ produto.nome }}</h3>
+            <p class="subtext">{{ produto.especificacoes }}</p>
+            
+            <div class="options">
+            {% for opcao in produto.opcao_set.all %}
+                <div class="option" onclick="selectOption(this)">{{ opcao }}</div>
+            {% endfor %} 
+            </div>
+            
 
-    <h2>Bem-vindo à Página Principal</h2>
-    <p>Explore nossa loja e aproveite nossas ofertas.</p>
-    <div class="produto">
-        <h3>{{ produto.nome }}</h3>
-        <p>{{ produto.descricao }}</p>
-        <p>R$ {{ produto.preco }}</p>
-        <button>Adicionar ao carrinho</button>
+            <p class = "subtitle">Frete:</p>
+
+            <input type="text" name="cep" id="cep" placeholder="CEP">
+            
+            <p class="subtitle">Preço:</p>
+            <p class="subtext-price">R${{ produto.preco }}</p>
+
+
+            <button class="cartButton">Adicionar ao carrinho</button>
+            <button class="buyButton">Comprar</button>
+        </div>
     </div>
+
+    <script>
+        function changeImage(image) {
+            document.getElementById('mainImage').src = image;
+        }
+
+        function selectOption(element) {
+            // Remove a classe 'option-active' de todas as opções
+            var options = document.getElementsByClassName('option');
+            for (var i = 0; i < options.length; i++) {
+                options[i].classList.remove('option-active');
+            }
+            // Adiciona a classe 'option-active' à opção clicada
+            element.classList.add('option-active');
+        }
+    </script>
+
 
 
 {% endblock %}
