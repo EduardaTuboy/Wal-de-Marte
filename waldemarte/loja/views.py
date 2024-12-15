@@ -47,7 +47,8 @@ def login(request : HttpRequest):
                 "user" : user.id
             }
             request.session["user"] = model_to_dict(user)
-            return render(request ,"base.html", context)
+            return redirect("index")
+            return render(request ,"index.html", context)
         else:
             messages.error(request, "Login invalido")
             return render(request, "login.html")
