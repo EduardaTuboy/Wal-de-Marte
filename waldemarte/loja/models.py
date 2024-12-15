@@ -12,9 +12,9 @@ import json
 class AbstractUsuario(models.Model):
     nome = models.CharField(max_length=20)
     email = models.EmailField()
-    telefone = models.CharField(max_length=20)
-    cpf = models.CharField(max_length=15)
-    senha = models.CharField(max_length=254) # TODO : implementar autenticacao
+    telefone = models.CharField(max_length=20, null=True)
+    cpf = models.CharField(max_length=15, null=True)
+    senha = models.CharField(max_length=254, null=True) # TODO : implementar autenticacao
     # Transacoes : Classe implementada (One to Many)
     class Meta:
         abstract = True
@@ -26,6 +26,16 @@ class AbstractUsuario(models.Model):
             "telefone" : self.telefone,
             "cpf" : self.cpf
         }
+    
+    @classmethod
+    def authenticate(cls, email, senha) -> models.Model | None:
+        user = cls.objects.get(email = email)
+        if user.senha == senha:
+            return user
+        else:
+            return None
+
+
 
 # Classe Vendedor
 class Vendedor(AbstractUsuario):
@@ -108,6 +118,13 @@ class Produto(models.Model):
         }
     def to_json(self):
         return json.dumps(self.asdict())
+    
+# Imagem de um produto
+class ImagemProduto(models.Model):
+    img_url = models.CharField(max_length=254)
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, default=1)
+
+
 
 # Poduto contem uma lista de opcoes, o melhor jeito de implementa-la eh com uma table separada (Many to One)
 class Opcao(models.Model):
