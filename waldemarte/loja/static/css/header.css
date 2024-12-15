@@ -24,6 +24,8 @@ header form input {
     outline: none;
     border: none;
     height: 20px;
+    width: 400px;
+    font-size: 16px;
 }
 
 header form button {
@@ -33,11 +35,14 @@ header form button {
     background-color: var(--cor-primaria);
     color: var(--cor-branco);
     cursor: pointer;
+    padding: 0 10px;
 }
 
 header nav {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
 }
 
 header nav a {
@@ -66,7 +71,8 @@ header nav ul {
 }
 
 header nav ul li {
-    margin: 0 10px; 
+    margin: 0 10px;
+    width: auto;
 }
 
 header nav ul a {
@@ -74,9 +80,12 @@ header nav ul a {
     color: var(--cor-branco);
     padding: 5px 10px; 
     transition: background-color 0.3s;
+    border-radius: 4px;
+    display: flex;
+    align-items: center; 
+    gap: 1rem;
 }
 
 header nav ul a:hover {
     background-color: var(--cor-secundaria);
-    border-radius: 4px;
 }

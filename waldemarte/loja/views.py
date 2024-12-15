@@ -30,6 +30,7 @@ def index(request):
         "query": query  # Passa o termo de busca para reutilizar no template
     }
     return render(request, "index.html", context)
+
 def login(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -37,7 +38,6 @@ def login(request):
          
         # Autenticacao feita, nao se ao certo qq precisa p login
         user = Comprador.authenticate(email, senha)
-        # user = {} # usuario dummy
 
         if user is not None:
             #login(request, user)
