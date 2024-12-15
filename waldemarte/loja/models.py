@@ -12,9 +12,9 @@ import json
 class AbstractUsuario(models.Model):
     nome = models.CharField(max_length=20)
     email = models.EmailField()
-    telefone = models.CharField(max_length=20, null=True)
-    cpf = models.CharField(max_length=15, null=True)
-    senha = models.CharField(max_length=254, null=True) # TODO : implementar autenticacao
+    telefone = models.CharField(max_length=20, null=True, blank=True)
+    cpf = models.CharField(max_length=15, null=True, blank=True)
+    senha = models.CharField(max_length=254, null=True, blank=True) # TODO : implementar autenticacao
     # Transacoes : Classe implementada (One to Many)
     class Meta:
         abstract = True
@@ -39,10 +39,10 @@ class AbstractUsuario(models.Model):
 
 # Classe Vendedor
 class Vendedor(AbstractUsuario):
-    cnpj = models.CharField(max_length=254, null=True)
+    cnpj = models.CharField(max_length=254, null=True, blank=True)
     # Produtos : Implementado como ForeignKey da classe Produto (One to Many)
-    banco_agencia = models.CharField(max_length=254, null=True)
-    banco_conta = models.CharField(max_length=254, null=True)
+    banco_agencia = models.CharField(max_length=254, null=True, blank=True)
+    banco_conta = models.CharField(max_length=254, null=True, blank=True)
 
     def asdict(self):
         return {
