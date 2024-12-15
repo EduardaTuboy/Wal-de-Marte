@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
-from .classes.frete import calcula_frete
+from .classes.frete import calcula_frete_produto, calcula_frete_carrinho
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.forms.models import model_to_dict
@@ -195,14 +195,16 @@ def delete_produto(request, p_id):
 def get_produto(request : HttpRequest, id):
     try: 
         prod = Produto.objects.get(pk=id)
-
-
         if request.headers.get("Content-Type") == "application/json":
             # Retorna o produto como JSON se for chamado via API
             return HttpResponse(json.dumps(prod.asdict()), content_type="application/json")
 
         # Se não for JSON, renderiza um template HTML
-        return render(request, "produto.html", {"produto": prod})
+        user = request.session.get("user", None)
+        if user is not None:
+            user = Comprador.objects.get(pk=user["id"])
+            return render(request, "produto.html", {"produto": prod, "frete" : calcula_frete_produto(user, prod)})
+        return render(request, "produto.html", {"produto": prod, "frete" : "Login para ver seu frete."})
 
     except Exception as e:
         print(e)
@@ -266,7 +268,7 @@ def add_to_cart(request : HttpRequest):
     cart.produtos.add(new_produto)
     cart.preco_final += new_produto.preco
     cart.save()
-    return HttpResponse(json.dumps({"novo_frete" : calcula_frete(cart),
+    return HttpResponse(json.dumps({"novo_frete" : calcula_frete_carrinho(cart),
                                     "novo_preco" : cart.preco_final
                                     }),
                                     content_type="application/json")
@@ -281,7 +283,7 @@ def remove_from_cart(request : HttpRequest):
     cart.preco_final -= produto.preco
     cart.save()
     produto.save()
-    return HttpResponse(json.dumps({"novo_frete" : calcula_frete(cart),
+    return HttpResponse(json.dumps({"novo_frete" : calcula_frete_carrinho(cart),
                                     "novo_preco" : cart.preco_final
                                     }),
                                     content_type="application/json")
@@ -305,6 +307,6 @@ def comprar_carrinho(request, user_id):
     for t in transacoes:
         notif.notificarCompraComprador(t)
         notif.notificarCompraVendedor(t)
-    return render(request, "base.html")
+    return render(request, "index.html")
 
 
