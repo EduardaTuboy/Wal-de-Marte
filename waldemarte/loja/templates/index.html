@@ -6,20 +6,21 @@
 
 {% block content %}
 
-    <h2>Bem-vindo à Página Principal</h2>
-    <p>Explore nossa loja e aproveite nossas ofertas.</p>
-
-
-    {% for produto in produtos %}
-        <a href="{% url 'get_produto' produto.id %}">
-            <div class="produto">
-                <h3>{{ produto.nome }}</h3>
-                <p>{{ produto.descricao }}</p>
-                <p>R$ {{ produto.preco }}</p>
-                <button>Adicionar ao carrinho</button>
-            </div>
-        </a>
-    {% endfor %}
+    <div class ="content">
+        <h2>Veja nossos melhores produtos:</h2>
+        <div class="products">
+            {% for produto in produtos %}
+                <a class="product" href="{% url 'get_produto' produto.id %}">
+                    <div >
+                        <img src="{{ produto.imagemproduto_set.all.first}}" alt="{{ produto.nome }}">
+                        <h3>{{ produto.nome }}</h3>
+                        <p>R$ {{ produto.preco }}</p>
+                    </div>
+                </a>
+    
+            {% endfor %}
+        </div>
+    </div>
 
 
 {% endblock %}
