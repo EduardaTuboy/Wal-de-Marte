@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
 from .classes.frete import calcula_frete
 from django.contrib import messages
 from django.contrib.auth import authenticate
+from django.forms.models import model_to_dict
 import json
 
 import loja.classes.notificacoes as notif
@@ -45,7 +46,7 @@ def login(request : HttpRequest):
             context = {
                 "user" : user.id
             }
-            request.session["user"] = user
+            request.session["user"] = model_to_dict(user)
             return render(request ,"base.html", context)
         else:
             messages.error(request, "Login invalido")
@@ -64,11 +65,14 @@ def register(request):
             messages.error(request, "As senhas não coincidem.")
             return render(request, "register.html")
 
-        Comprador(
+        c = Comprador(
             nome=request.POST.get("username"),
             email=email,
             senha=password
-        ).save()
+        )
+        c.save()
+        request.session["user"] = model_to_dict(c)
+        return render(request, "index.html")
     return render(request, "register.html")
 
 # TODO : verificacao mais robusta nas funcoes de criacao
