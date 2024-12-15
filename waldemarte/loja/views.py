@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
 from .classes.frete import calcula_frete
 from django.contrib import messages
-
+from django.contrib.auth import authenticate
 import json
 
 import loja.classes.notificacoes as notif
@@ -17,17 +17,17 @@ from .models import *
 
 # TODO : index,
 #        fazer autenticaçao de senha
-def index(request):
+def index(request : HttpRequest):
     # verificar se o usuario esta logado
-
-
+    user = request.session.get("user", None) 
     produtos = query_produtos(request)
     context = {
-        "produtos" : produtos
+        "produtos" : produtos,
+        "user" : user # se autenticado eh o user, senao eh none
     }
 
     return render(request, "index.html", context)
-    pass
+    
 
 def login(request):
     if request.method == "POST":
@@ -40,7 +40,10 @@ def login(request):
 
         if user is not None:
             #login(request, user)
-            return redirect("/")
+            context = {
+                "user" : user.id
+            }
+            return render(request ,"base.html", context)
         else:
             messages.error(request, "Login invalido")
             return render(request, "login.html")
