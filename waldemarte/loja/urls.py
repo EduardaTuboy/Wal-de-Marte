@@ -120,7 +120,14 @@ urlpatterns = [
     # Remove um produto do carrinho do usuario
     # Json (request) -> {"user_id", "produto_id"}
     # Json (responde) -> {"novo_frete", "novo_preco"}
-    path("cart/remove", views.remove_from_cart)
+    path("cart/remove", views.remove_from_cart),
 
 
+
+    # IMPORTANATE: este endpoint sera criado desconsiderando qualque logica de pagamento, 
+    # apenas para poder implenetar outras partes que dependem de compra, 
+    # nem sei se vamos implementar uma logica mais complexa, mas fica o aviso
+    # Json (request) -> {"user_id"}, Nao rpecisa dos produtos, o sistema pega o carrinho de compras direto
+
+    path("comprar-carrinho/<int:user_id>", views.comprar_carrinho)
 ]   
