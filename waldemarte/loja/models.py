@@ -1,5 +1,5 @@
 from django.db import models
-from .classes.frete import calcula_frete
+from .classes.frete import calcula_frete_carrinho, calcula_frete_produto
 import json
 # Create your models here. -> informacoes que vamos armazenar no BD
 
@@ -165,7 +165,7 @@ class CarrinhoDeCompras(models.Model):
             "user_id" : self.comprador_id,
             "produtos" : [p.asdict() for p in self.produtos.all()],
             "preco_final" : self.preco_final,
-            "frete" : calcula_frete(self)
+            "frete" : calcula_frete_carrinho(self)
         })
     
     def clear(self):
