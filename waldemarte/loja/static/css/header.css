@@ -1,0 +1,82 @@
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    background-color: var(--cor-preto);
+    color: var(--cor-branco);
+    align-items: center;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    font-family: var(--fonte-texto);
+}
+
+header form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0; 
+}
+
+header form input {
+    padding: 5px 10px;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    border: none;
+    height: 20px;
+}
+
+header form button {
+    height: 30px;
+    border-radius: 0 4px 4px 0;
+    border: none;
+    background-color: var(--cor-primaria);
+    color: var(--cor-branco);
+    cursor: pointer;
+}
+
+header nav {
+    display: flex;
+    flex-direction: row;
+}
+
+header nav a {
+    text-decoration: none;
+    color: var(--cor-branco);
+    padding: 5px 10px; 
+}
+
+header nav a h1 {
+    font-family: var(--fonte-logo);
+    font-size: 2rem;
+    font-weight: 200;
+    margin: 0;
+    color: var(--cor-branco);
+    padding: 5px 10px; 
+}
+
+header nav ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+header nav ul li {
+    margin: 0 10px; 
+}
+
+header nav ul a {
+    text-decoration: none;
+    color: var(--cor-branco);
+    padding: 5px 10px; 
+    transition: background-color 0.3s;
+}
+
+header nav ul a:hover {
+    background-color: var(--cor-secundaria);
+    border-radius: 4px;
+}

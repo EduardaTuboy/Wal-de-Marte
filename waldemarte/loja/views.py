@@ -17,17 +17,18 @@ from .models import *
 # TODO : index,
 #        fazer autenticaçao de senha
 def index(request):
-    # verificar se o usuario esta logado
+    query = request.GET.get("query", "")  # Obtém o termo de busca
+    produtos = Produto.objects.all()  # Produtos padrão
 
+    # Se houver uma busca, filtra os produtos
+    if query:
+        produtos = produtos.filter(nome__icontains=query)
 
-    produtos = query_produtos(request)
     context = {
-        "produtos" : produtos
+        "produtos": produtos,
+        "query": query  # Passa o termo de busca para reutilizar no template
     }
-
     return render(request, "index.html", context)
-    pass
-
 def login(request):
     if request.method == "POST":
         email = request.POST["email"]

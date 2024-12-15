@@ -6,18 +6,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Waldemarte{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+
 </head>
 <body>
     <header>
         <nav>
+            <a href="{% url 'index' %}">
+                <h1> Wal de Marte</h2>
+            </a>
+            <form action="{% url 'index' %}" method="get" class="search-bar">
+                <input type="text" name="query" placeholder="Pesquisar produtos..." required>
+                <button type="submit">Buscar</button>
+            </form>
             <ul>
-                <li><a href="{% url 'index' %}">Home</a></li>
-                <li><a href="{% url 'login' %}">Login</a></li>
-                <li><a href="{% url 'register' %}">Registrar</a></li>
-            
-                <li> ver carrinho </li>
-                <li> perfil</li>
-            </ul>
+                {% if user.is_authenticated %}
+                <!-- Exibe se o usuário está logado -->
+                <li><a href="">Perfil</a></li>
+                <li><a href="">Ver Carrinho</a></li>
+                {% else %}
+                    <!-- Exibe se o usuário não está logado -->
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Registrar</a></li>
+                {% endif %}
+                </ul>
+
         </nav>
     </header>
     <main>
