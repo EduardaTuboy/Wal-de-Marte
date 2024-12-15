@@ -187,6 +187,11 @@ def add_produto(request : HttpRequest):
         return HttpResponseBadRequest()
     return HttpResponse()
 
+def delete_produto(request, p_id):
+    Produto.objects.get(pk=p_id).delete()
+    return HttpResponse()
+
+
 def get_produto(request : HttpRequest, id):
     try: 
         prod = Produto.objects.get(pk=id)
