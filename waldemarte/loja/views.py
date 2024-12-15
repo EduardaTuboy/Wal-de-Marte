@@ -177,8 +177,11 @@ def add_produto(request : HttpRequest):
         produto = Produto(vendedor = owner, **args["produto"])
         produto.save()
         opcoes = [Opcao(opcao=op, produto=produto) for op in args["opcoes"]]
+        imagens = [ImagemProduto(img_url=i, produto=produto) for i in args["imagens"]]
         for op in opcoes:
             op.save()
+        for i in imagens:
+            i.save()
     except Exception as e:
         print(e)
         return HttpResponseBadRequest()

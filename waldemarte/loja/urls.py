@@ -98,6 +98,7 @@ urlpatterns = [
         #     "especificacoes" : <specs>,
         #     "estoque" : <init_estoque>
         # },
+        # "imagens" : [<urls>],
         # "opcoes" :[<opcoes>]    
     # }
     path("produto/add-produto", views.add_produto),

@@ -114,7 +114,8 @@ class Produto(models.Model):
             "opcoes" : [str(op) for op in self.opcao_set.all()],
             "especificacoes" : self.especificacoes,
             "estoque" : self.estoque,
-            "vendedor" : self.vendedor.nome
+            "vendedor" : self.vendedor.nome,
+            "imagens" : [str(i) for i in self.imagemproduto_set.all()]
         }
     def to_json(self):
         return json.dumps(self.asdict())
@@ -124,6 +125,8 @@ class ImagemProduto(models.Model):
     img_url = models.CharField(max_length=254)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, default=1)
 
+    def __str__(self):
+        return self.img_url
 
 
 # Poduto contem uma lista de opcoes, o melhor jeito de implementa-la eh com uma table separada (Many to One)
