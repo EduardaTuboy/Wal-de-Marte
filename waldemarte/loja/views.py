@@ -5,6 +5,7 @@ from django.contrib import messages
 
 import json
 
+import loja.classes.notificacoes as notif
 from .models import *
 
 
@@ -34,8 +35,9 @@ def login(request):
         email = request.POST["email"]
         senha = request.POST["senha"]
          
-        #user = authenticate(email=email, senha=senha)
-        user = {} # usuario dummy
+        # Autenticacao feita, nao se ao certo qq precisa p login
+        user = Comprador.authenticate(email, senha)
+        # user = {} # usuario dummy
 
         if user is not None:
             #login(request, user)
@@ -57,7 +59,11 @@ def register(request):
             messages.error(request, "As senhas não coincidem.")
             return render(request, "register.html")
 
-        # Criaçao o usuario (TODO)
+        Comprador(
+            nome=request.POST.get("username"),
+            email=email,
+            senha=password
+        ).save()
     return render(request, "register.html")
 
 # TODO : verificacao mais robusta nas funcoes de criacao
@@ -259,3 +265,16 @@ def remove_from_cart(request : HttpRequest):
 
 def return_compradores(request):
     return HttpResponse([str(c) for c in Comprador.objects.all()])
+
+
+
+def comprar_carrinho(request, user_id):
+    carrinho = CarrinhoDeCompras.objects.filter(comprador_id = user_id)[0]
+    transacoes = Transacao.registrar_carrinho(carrinho)
+    carrinho.clear()
+    # Nao eh mto elegangte para varios produtos, mas funciona
+    for t in transacoes:
+        notif.notificarCompraComprador(t)
+        notif.notificarCompraVendedor(t)
+
+
