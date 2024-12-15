@@ -18,6 +18,7 @@ from .models import *
 
 # TODO : index,
 #        fazer autenticaçao de senha
+
 def index(request : HttpRequest):
     query = request.GET.get("query", "")  # Obtém o termo de busca
     produtos = Produto.objects.all()  # Produtos padrão
@@ -47,10 +48,10 @@ def login(request : HttpRequest):
                 "user" : user.id
             }
             request.session["user"] = model_to_dict(user)
-            return render(request ,"base.html", context)
+            return redirect("index")
         else:
             messages.error(request, "Login invalido")
-            return render(request, "login.html")
+            return redirect(request, "login.html")
     # se a requisiçao for GET, retorna a pagina de login
     return render(request, "login.html")
 
@@ -72,8 +73,19 @@ def register(request):
         )
         c.save()
         request.session["user"] = model_to_dict(c)
-        return render(request, "index.html")
+        return redirect("index")
     return render(request, "register.html")
+
+
+
+def perfil(request : HttpRequest):
+    user = request.session.get("user", None)
+    
+    if user is None:
+        return redirect("login")
+    
+    request.session["user"] = None
+    return redirect("index")
 
 # TODO : verificacao mais robusta nas funcoes de criacao
 def criar_comprador(request : HttpRequest):
