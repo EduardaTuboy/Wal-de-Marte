@@ -103,7 +103,7 @@ urlpatterns = [
     # }
     path("produto/add-produto", views.add_produto),
 
-    path("produto/delete/<int:id>", views.delete_produto),
+    path("produto/delete/<int:p_id>", views.delete_produto),
 
     # Funciona igual os de editar usuario
     # Porem "opcoes" dentro de "fileds" deve ser uma lista
