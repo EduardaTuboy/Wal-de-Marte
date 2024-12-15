@@ -29,7 +29,7 @@ def index(request : HttpRequest):
     return render(request, "index.html", context)
     
 
-def login(request):
+def login(request : HttpRequest):
     if request.method == "POST":
         email = request.POST["email"]
         senha = request.POST["senha"]
@@ -43,6 +43,7 @@ def login(request):
             context = {
                 "user" : user.id
             }
+            request.session["user"] = user
             return render(request ,"base.html", context)
         else:
             messages.error(request, "Login invalido")
@@ -278,5 +279,6 @@ def comprar_carrinho(request, user_id):
     for t in transacoes:
         notif.notificarCompraComprador(t)
         notif.notificarCompraVendedor(t)
+    return render(request, "base.html")
 
 
