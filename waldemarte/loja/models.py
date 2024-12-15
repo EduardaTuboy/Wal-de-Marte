@@ -184,13 +184,17 @@ class Transacao(models.Model):
 
     @staticmethod
     def registrar_carrinho(carrinho : CarrinhoDeCompras):
+        transacao_list = []
         for prod in carrinho.produtos.all():
-            Transacao(
+            t = Transacao(
                 comprador_id=carrinho.comprador_id,
                 vendedor_id=prod.vendedor_id,
                 produto_id=prod.id,
                 preco=prod.preco
-            ).save()
+            )
+            t.save()
+            transacao_list.append(t)
+        return transacao_list
             
 
 

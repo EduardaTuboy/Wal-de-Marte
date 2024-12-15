@@ -269,6 +269,11 @@ def return_compradores(request):
 
 def comprar_carrinho(request, user_id):
     carrinho = CarrinhoDeCompras.objects.filter(comprador_id = user_id)[0]
-    Transacao.registrar_carrinho(carrinho)
+    transacoes = Transacao.registrar_carrinho(carrinho)
     carrinho.clear()
+    # Nao eh mto elegangte para varios produtos, mas funciona
+    for t in transacoes:
+        notif.notificarCompraComprador(t)
+        notif.notificarCompraVendedor(t)
+
 
