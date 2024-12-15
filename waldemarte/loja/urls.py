@@ -13,6 +13,8 @@ urlpatterns = [
 
     path("register/", views.register, name="register"),
 
+    path("perfil/", views.perfil, name="perfil"),
+
     # Salva um comprador na base de dados
     # Body do request em json -> 
     # {
