@@ -17,6 +17,7 @@ urlpatterns = [
 
     path("compra/", views.compra, name="compra"),
 
+    path("vendaConcluida/", views.vendaConcluida, name="vendaConcluida"),
 
 
     # Salva um comprador na base de dados
@@ -134,7 +135,7 @@ urlpatterns = [
     # Adiciona um produto ao carrinho do usuario
     # Json (request) -> {"user_id", "produto_id"}
     # Json (responde) -> {"novo_frete", "novo_preco"}
-    path("cart/add", views.add_to_cart),
+    path("cart/add", views.add_to_cart, name="add_to_cart"),
 
     # Remove um produto do carrinho do usuario
     # Json (request) -> {"user_id", "produto_id"}

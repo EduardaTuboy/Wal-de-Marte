@@ -34,9 +34,14 @@
             <p class="subtitle">Preço:</p>
             <p class="subtext-price">R${{ produto.preco }}</p>
 
-
-            <button class="cartButton">Adicionar ao carrinho</button>
-            <button class="buyButton">Comprar</button>
+            <button type="submit" class="buyButton">Comprar</button>
+            
+            <form action="{% url 'add_to_cart' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                <button type="submit" class="cartButton">Adicionar ao carrinho</button>
+            </form>
         </div>
     </div>
 

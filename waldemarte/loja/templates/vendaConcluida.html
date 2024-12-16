@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Carrinho de Compras{% endblock %}
+
+{% block content %}
+    <div class="content-sold">
+        <h2>
+            Obrigado pela compra!
+        </h2>
+        <h2>
+            Seu produto chegará em breve.
+        </h2>
+        <a href="{% url 'index'%}">
+            Clique aqui para voltar a tela inicial.
+        </a>
+    </div>
+{% endblock %}

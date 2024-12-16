@@ -1,0 +1,46 @@
+.content-buy{
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--cor-primaria);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    box-sizing: border-box;
+    gap: 2rem;
+    font-family: var(--fonte-texto);
+}
+
+.content-buy .buy-conteiner{
+    width: 90%;
+    padding: 1rem 1.2rem;
+    background-color: var(--cor-branco);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-buy .buy-conteiner h2{
+    font-size: 1.2rem;
+    color: var(--cor-texto);
+    margin-bottom: 0.2rem;
+}
+
+.content-buy .buy-conteiner div{
+    border: 1px solid var(--cor-preto);
+    border-radius: 4px;
+    padding: 1rem;
+} 
+
+.content-buy .buy-conteiner button{
+    background-color: var(--cor-primaria);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    width: 50%;
+    align-self: center;
+}
