@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
 from .classes.frete import calcula_frete_produto, calcula_frete_carrinho
+from .classes.db_init import initDefaultDB
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.forms.models import model_to_dict
@@ -20,7 +21,13 @@ from .models import *
 # TODO : index,
 #        fazer autenticaçao de senha
 
+
+
+
+
 def index(request : HttpRequest):
+    if Produto.objects.exists():
+        initDefaultDB()
     query = request.GET.get("query", "")  # Obtém o termo de busca
     produtos = Produto.objects.all()  # Produtos padrão
     user = request.session.get("user", None)     # Se houver uma busca, filtra os produtos

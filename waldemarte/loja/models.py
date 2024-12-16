@@ -112,7 +112,7 @@ class Endereco(models.Model):
 class Produto(models.Model):
     nome = models.CharField(max_length=254)
     preco = models.FloatField()
-    # avaliacoes : Foreign Key (Onne to Many) na classe Avaliacao
+    # avaliacoes : Foreign Key (One to Many) na classe Avaliacao
     # opcoes : implementado como foreign key na classe Opcao (One to Many)
     especificacoes = models.TextField()
     estoque = models.IntegerField()
