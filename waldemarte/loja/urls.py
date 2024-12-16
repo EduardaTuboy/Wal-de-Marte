@@ -15,6 +15,8 @@ urlpatterns = [
 
     path("perfil/", views.perfil, name="perfil"),
 
+
+
     # Salva um comprador na base de dados
     # Body do request em json -> 
     # {
@@ -124,7 +126,9 @@ urlpatterns = [
     #   "user_id", "preco_final", "frete",
     #   "produtos" : [{"nome", "preco", "opcoes" : [lista de strings], "especificacoes", "estoque", "vendedor"}]
     # }
-    path("cart/get", views.get_cart),
+    path("cart", views.get_cart, name="get_cart"),
+
+
     # Adiciona um produto ao carrinho do usuario
     # Json (request) -> {"user_id", "produto_id"}
     # Json (responde) -> {"novo_frete", "novo_preco"}

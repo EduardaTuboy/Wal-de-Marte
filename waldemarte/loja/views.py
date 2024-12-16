@@ -4,6 +4,7 @@ from .classes.frete import calcula_frete_produto, calcula_frete_carrinho
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.forms.models import model_to_dict
+from django.http import JsonResponse
 import json
 
 import loja.classes.notificacoes as notif
@@ -86,6 +87,13 @@ def perfil(request : HttpRequest):
     
     request.session["user"] = None
     return redirect("index")
+
+
+def carrinho(request : HttpRequest):
+    user = request.session.get("user", None)
+    if user is None:
+        return redirect("login")
+    return render(request, "carrinho.html", {"user" : user})
 
 # TODO : verificacao mais robusta nas funcoes de criacao
 def criar_comprador(request : HttpRequest):
@@ -249,30 +257,68 @@ def query_produtos(request: HttpRequest):
     return produtos  # Retorna os objetos diretamente se chamado internamente
 
 
+def get_cart(request: HttpRequest):
+    user = request.session.get("user", None)
+    if user is None:
+        return redirect("login")
 
-
-def get_cart(request : HttpRequest):
-    return HttpResponse(CarrinhoDeCompras.objects.get(comprador_id=json.loads(request.body)["user_id"]).to_json(),
-                        content_type="application/json")
-
-def add_to_cart(request : HttpRequest):
-    args = json.loads(request.body)
-    user = Comprador.objects.get(pk=args["user_id"])
-    new_produto = Produto.objects.get(pk=args["produto_id"])
-    cart = None
     try:
-        cart = CarrinhoDeCompras.objects.get(comprador_id=args["user_id"])
-    except CarrinhoDeCompras.DoesNotExist as e:
-        cart = CarrinhoDeCompras(comprador = user)
-    cart.save()
-    cart.produtos.add(new_produto)
-    cart.preco_final += new_produto.preco
-    cart.save()
-    return HttpResponse(json.dumps({"novo_frete" : calcula_frete_carrinho(cart),
-                                    "novo_preco" : cart.preco_final
-                                    }),
-                                    content_type="application/json")
+        cart = CarrinhoDeCompras.objects.get(comprador_id=user["id"])
+        produtos = cart.produtos.all()
+    except CarrinhoDeCompras.DoesNotExist:
+        produtos = []
 
+    context = {
+        "user": user,
+        "produtos": produtos,
+        "preco_final": cart.preco_final if produtos else 0,
+        "frete": calcula_frete_carrinho(cart) if produtos else 0
+    }
+    return render(request, "carrinho.html", context)
+
+
+def add_to_cart(request: HttpRequest):
+    try:
+        args = json.loads(request.body)
+        user_id = args.get("user_id")
+        produto_id = args.get("produto_id")
+
+        if not user_id or not produto_id:
+            return JsonResponse({"error": "user_id and produto_id are required"}, status=400)
+
+        try:
+            user = Comprador.objects.get(pk=user_id)
+        except Comprador.DoesNotExist:
+            return JsonResponse({"error": "User does not exist"}, status=404)
+
+        try:
+            new_produto = Produto.objects.get(pk=produto_id)
+        except Produto.DoesNotExist:
+            return JsonResponse({"error": "Product does not exist"}, status=404)
+
+        try:
+            cart = CarrinhoDeCompras.objects.get(comprador_id=user_id)
+        except CarrinhoDeCompras.DoesNotExist:
+            cart = CarrinhoDeCompras(comprador=user)
+            cart.save()
+
+        cart.produtos.add(new_produto)
+        cart.preco_final += new_produto.preco
+        cart.save()
+
+        # Verificar se o usuário tem um endereço associado
+        endereco = user.endereco_set.first()
+        if not endereco:
+            return JsonResponse({"error": "User does not have an address"}, status=400)
+
+        novo_frete = calcula_frete_carrinho(cart)
+        return JsonResponse({"novo_frete": novo_frete, "novo_preco": cart.preco_final})
+
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+    
 def remove_from_cart(request : HttpRequest):
     args = json.loads(request.body)
     user = Comprador.objects.get(pk=args["user_id"])

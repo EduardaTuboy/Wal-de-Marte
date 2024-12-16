@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Carrinho de Compras{% endblock %}
+
+{% block content %}
+    <div class="content-cart">
+        <h2>Carrinho de Compras</h2>
+        {% if produtos %}
+            <ul class="cart-products">
+                {% for produto in produtos %}
+                    <li class="cart-product">
+                        <img src="{{ produto.imagemproduto_set.all.first.imagem.url }}" alt="{{ produto.nome }}">
+                        <div class="product-info">
+                            <h3>{{ produto.nome }}</h3>
+                            <p>{{ produto.descricao }}</p>
+                            <p>R$ {{ produto.preco }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="cart-summary">
+                <p>Preço Total: R$ {{ preco_final }}</p>
+                <p>Frete: R$ {{ frete }}</p>
+                <p>Preço Final: R$ {{ preco_final|add:frete }}</p>
+                <button>Finalizar Compra</button>
+            </div>
+        {% else %}
+            <p>Seu carrinho está vazio.</p>
+        {% endif %}
+    </div>
+{% endblock %}
