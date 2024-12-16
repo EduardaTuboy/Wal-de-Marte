@@ -26,7 +26,7 @@ from .models import *
 
 
 def index(request : HttpRequest):
-    if Produto.objects.exists():
+    if not Produto.objects.exists():
         initDefaultDB()
     query = request.GET.get("query", "")  # Obtém o termo de busca
     produtos = Produto.objects.all()  # Produtos padrão
