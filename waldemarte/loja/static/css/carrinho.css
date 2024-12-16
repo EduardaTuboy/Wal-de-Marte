@@ -5,10 +5,12 @@
     min-height: 100vh;
     background-color: var(--cor-primaria);
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
     padding: 2rem;
     box-sizing: border-box;
+    gap: 2rem;
+
+    font-family: var(--fonte-texto);
 }
 
 .content-cart h2 {
@@ -23,37 +25,38 @@
     margin: 0;
     width: 100%;
     max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .cart-product {
     display: flex;
-    align-items: center;
     background-color: var(--cor-branco);
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 1rem;
     margin-bottom: 1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .cart-product img {
-    width: 100px;
+    width: 25%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 2px;
     margin-right: 1rem;
 }
 
-.product-info {
+.cart-product .productCart-info {
     display: flex;
     flex-direction: column;
 }
 
-.product-info h3 {
+.cart-product .productCart-info h3 {
     font-size: 1.5rem;
     color: #333;
     margin: 0;
 }
 
-.product-info p {
+.cart-product .productCart-info p {
     font-size: 1rem;
     color: #666;
     margin: 0.5rem 0;
@@ -62,21 +65,35 @@
 .cart-summary {
     width: 100%;
     max-width: 800px;
+    height: fit-content;
     background-color: var(--cor-branco);
     border-radius: 8px;
     padding: 1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+.cart-summary h2 {
+    font-size: 1.7rem;
+    margin: 0;
+    font-weight: bold;
+    padding-bottom: 1rem;
 }
 
 .cart-summary p {
     font-size: 1.2rem;
-    color: #333;
+    color: var(--cor-texto);
+    margin: 0.5rem 0;
+}
+
+.cart-summary .total{
+    font-size: 1.2rem;
+    color: var(--cor-texto);
+    font-weight: 800;
     margin: 0.5rem 0;
 }
 
 .cart-summary button {
-    background-color: #007bff;
+    background-color: var(--cor-primaria);
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -87,5 +104,5 @@
 }
 
 .cart-summary button:hover {
-    background-color: #0056b3;
+    background-color: var(--cor-secundaria);
 }
