@@ -1,6 +1,11 @@
 from django.urls import path
 
+from . import userController as user
+from . import produtoController as produto
+from . import carrinhoController as cart
+from . import compraController as compra
 from . import views
+
 
 urlpatterns = [
     # TODO: index
@@ -15,9 +20,9 @@ urlpatterns = [
 
     path("perfil/", views.perfil, name="perfil"),
 
-    path("comprar-produto/<int:produto_id>", views.comprar_produto, name="comprar_produto"),
+    path("comprar-produto/<int:produto_id>", compra.comprar_produto, name="comprar_produto"),
 
-    path("realizar-compra/", views.realizar_compra, name="realizar_compra"),
+    path("realizar-compra/", compra.realizar_compra, name="realizar_compra"),
 
     path("vendaConcluida/", views.vendaConcluida, name="vendaConcluida"),
 
@@ -31,16 +36,16 @@ urlpatterns = [
     #   "cpf" : <cpf>,
     #   "senha" : <senha>
     #}
-    path("user/save-comprador", views.criar_comprador),
+    path("user/save-comprador", user.criar_comprador),
 
     # Retorna comprador por id
     # Json (response) -> {"nome", "email", "telefone", "cpf", "endereco" : []}
-    path("user/get-comprador/<int:id>", views.get_comprador),
+    path("user/get-comprador/<int:id>", user.get_comprador),
     
     # Altera dados de comprador por id (nao altera endereco ou cartoes)
     # Json (request) -> {"id", "fields" : {<nome_do_campo>}}
     # Siga o modelo em user/save-comprador para nome do campo
-    path("user/comprador-edit", views.update_comprador),
+    path("user/comprador-edit", user.update_comprador),
 
     # Retorna compradores em uma string, apenas para debug
     path("user/comprador-all", views.return_compradores),
@@ -58,13 +63,13 @@ urlpatterns = [
     #   "banco_conta" : <conta>,
     #   "banco_agencia" : <agencia>
     #}
-    path("user/save-vendedor", views.criar_vendedor),
+    path("user/save-vendedor", user.criar_vendedor),
 
     # Edita vendedor, mesma coisa do comprador-edit
-    path("user/vendedor-edit", views.update_vendedor),
+    path("user/vendedor-edit", user.update_vendedor),
 
     # Retorna um vendedor por id
-    path("user/get-vendedor/<int:id>", views.get_vendedor),
+    path("user/get-vendedor/<int:id>", user.get_vendedor),
 
     # Salva o endereco para um comprador pelo ID
     # Body do request em json -> 
@@ -80,7 +85,7 @@ urlpatterns = [
     #         "complemento" : <complemento>
     #     }
     # }
-    path("user/set-endereco-comprador", views.comprador_set_endereco),
+    path("user/set-endereco-comprador", user.comprador_set_endereco),
 
 
     # Salva um cartao associado a um comprador
@@ -93,7 +98,7 @@ urlpatterns = [
     #     }
 
     # }
-    path("user/add-cartao-comprador", views.comprador_add_cartao),
+    path("user/add-cartao-comprador", user.comprador_add_cartao),
 
     # Adiciona produto associado a um vendedor
     # Json -> 
@@ -108,22 +113,22 @@ urlpatterns = [
         # "imagens" : [<urls>],
         # "opcoes" :[<opcoes>]    
     # }
-    path("produto/add-produto", views.add_produto),
+    path("produto/add-produto", produto.add_produto),
 
-    path("produto/delete/<int:p_id>", views.delete_produto),
+    path("produto/delete/<int:p_id>", produto.delete_produto),
 
     # Funciona igual os de editar usuario
     # Porem "opcoes" dentro de "fileds" deve ser uma lista
-    path("produto/produto-edit", views.update_produto),
+    path("produto/produto-edit", produto.update_produto),
 
     # Retorna um produto por id
-    path("produto/<int:id>", views.get_produto, name="get_produto"),
+    path("produto/<int:id>", produto.get_produto, name="get_produto"),
 
 
     # Retorna uma busca por produtos, limitada por nome e preco
     # Json (request) -> {"query", "preco_lim_inf", "preco_lim_sup"}
     # Json (response) -> {"nome", "preco", "opcoes" : [lista de strings], "especificacoes", "estoque", "vendedor"}
-    path("produto/query-produtos", views.query_produtos),
+    path("produto/query-produtos", produto.query_produtos),
 
     # Retorna o carrinho de compras de um usuario
     # Json (request) -> {"user_id"}
@@ -131,19 +136,19 @@ urlpatterns = [
     #   "user_id", "preco_final", "frete",
     #   "produtos" : [{"nome", "preco", "opcoes" : [lista de strings], "especificacoes", "estoque", "vendedor"}]
     # }
-    path("cart", views.get_cart, name="get_cart"),
+    path("cart", cart.get_cart, name="get_cart"),
 
 
     # Adiciona um produto ao carrinho do usuario
     # Json (request) -> {"user_id", "produto_id"}
     # Json (responde) -> {"novo_frete", "novo_preco"}
-    path("cart/add", views.add_to_cart, name="add_to_cart"),
+    path("cart/add", cart.add_to_cart, name="add_to_cart"),
 
 
     # Remove um produto do carrinho do usuario
     # Json (request) -> {"user_id", "produto_id"}
     # Json (responde) -> {"novo_frete", "novo_preco"}
-    path("cart/remove", views.remove_from_cart, name="remove_from_cart"),
+    path("cart/remove", cart.remove_from_cart, name="remove_from_cart"),
 
 
 
@@ -153,9 +158,9 @@ urlpatterns = [
     # Json (request) -> {"user_id"}, Nao rpecisa dos produtos, o sistema pega o carrinho de compras direto
 
     # path("comprar-carrinho/<int:user_id>", views.comprar_carrinho),
-    path("compra-carrinho/", views.compra_carrinho, name="compra_carrinho"),
+    path("compra-carrinho/", compra.compra_carrinho, name="compra_carrinho"),
 
 
     # O id de usuario sera puxado da session
-    path("comprar-produto/<int:produto_id>", views.comprar_produto)
+    path("comprar-produto/<int:produto_id>", compra.comprar_produto)
 ]   
