@@ -26,21 +26,19 @@
             {% endfor %} 
             </div>
             
-
-            <p class = "subtitle">Frete:</p>
-
-            <input type="text" name="cep" id="cep" placeholder="CEP">
-            
             <p class="subtitle">Preço:</p>
             <p class="subtext-price">R${{ produto.preco }}</p>
-
-            <button type="submit" class="buyButton">Comprar</button>
             
+            <form action="{% url 'comprar_produto' produto.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="buyButton">Comprar</button>
+            </form>
+            
+
             <form action="{% url 'add_to_cart' %}" method="POST">
                 {% csrf_token %}
-                <input type="hidden" name="user_id" value="{{ user.id }}">
                 <input type="hidden" name="produto_id" value="{{ produto.id }}">
-                <button type="submit" class="cartButton">Adicionar ao carrinho</button>
+                <button type="submit" class="cartButton">Adicionar ao Carrinho</button>
             </form>
         </div>
     </div>

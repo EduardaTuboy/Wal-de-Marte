@@ -35,7 +35,7 @@
                 {% if user %}
                 <!-- Exibe se o usuário está logado -->
                 <li><a href="{% url 'get_cart' %}"><i class="fas fa-shopping-cart"></i> Ver Carrinho</a></li>
-                <li><a href="{% url 'perfil' %}"><i class="fas fa-user"></i> Perfil</a></li>
+                <li><a href="{% url 'perfil' %}"><i class="fas fa-user"></i> Log-out</a></li>
                 {% else %}
                     <!-- Exibe se o usuário não está logado -->
                     <li><a href="{% url 'login' %}">Login</a></li>

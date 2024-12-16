@@ -15,13 +15,33 @@
         <div class="buy-conteiner">
             <h2>Forma de pagamento</h2>
             <div>
-                Selecione entre os endereços cadastrados ou adicione um novo endereço.
+                Selecione entre as opções de pagamento cadastradas ou adicione uma nova forma de pagamento.
             </div>
         </div>
         <div class="buy-conteiner">
-            <button>
-                Continuar
-            </button>
+            <h2>Resumo da Compra</h2>
+            <ul>
+                {% for produto in produtos %}
+                <li>
+                    <strong>{{ produto.nome }}</strong> - R$ {{ produto.preco }}
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="total-price">
+                <h3>Valor Total: 
+                    R$ 
+                    {{ total }}
+                </h3>
+            </div>
+        </div>
+        <div class="buy-conteiner">
+            <form action="{% url 'realizar_compra' %}" method="POST">
+                {% csrf_token %}
+                {% for produto in produtos %}
+                <input type="hidden" name="produtos_ids" value="{{ produto.id }}">
+                {% endfor %}
+                <button type="submit" class="buyButton">Continuar</button>
+            </form>
         </div>
     </div>
 {% endblock %}

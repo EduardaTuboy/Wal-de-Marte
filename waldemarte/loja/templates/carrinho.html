@@ -16,20 +16,31 @@
                             <h3>{{ produto.nome }}</h3>
                             <p>{{ produto.especificacoes }}</p>
                             <p>R$ {{ produto.preco }}</p>
+                            <form action="{% url 'remove_from_cart' %}" method="POST" class="remove-product-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                                <button type="submit" class="removeButton">Remover</button>
+                            </form>
                         </div>
                     </li>
                 {% endfor %}
             </ul>
             <div class="cart-summary">
                 <h2>Resumo da compra</h2>
-
-                <p>Produtos: R${{ preco_final }}</p>
-                <p>Frete(s): R${{  frete|floatformat:2 }}</p>
+                <p>Produtos: R${{ preco_final|floatformat:2 }}</p>
+                <p>Frete(s): R${{ frete|floatformat:2 }}</p>
                 <p class="total">Total: R${{ preco_final|add:frete }}</p>
-                <button>Finalizar Compra</button>
+            
+                <form action="{% url 'compra_carrinho' %}" method="POST">
+                    {% csrf_token %}
+                    {% for produto in produtos %}
+                    <input type="hidden" name="produtos_ids" value="{{ produto.id }}">
+                    {% endfor %}
+                    <button type="submit" class="cartButton">Finalizar Compra</button>
+                </form>
             </div>
         {% else %}
-            <p>Seu carrinho está vazio.</p>
+            <p class="empty-cart">Seu carrinho está vazio.</p>
         {% endif %}
     </div>
 {% endblock %}

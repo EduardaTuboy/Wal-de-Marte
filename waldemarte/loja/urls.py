@@ -15,7 +15,9 @@ urlpatterns = [
 
     path("perfil/", views.perfil, name="perfil"),
 
-    path("compra/", views.compra, name="compra"),
+    path("comprar-produto/<int:produto_id>", views.comprar_produto, name="comprar_produto"),
+
+    path("realizar-compra/", views.realizar_compra, name="realizar_compra"),
 
     path("vendaConcluida/", views.vendaConcluida, name="vendaConcluida"),
 
@@ -137,10 +139,11 @@ urlpatterns = [
     # Json (responde) -> {"novo_frete", "novo_preco"}
     path("cart/add", views.add_to_cart, name="add_to_cart"),
 
+
     # Remove um produto do carrinho do usuario
     # Json (request) -> {"user_id", "produto_id"}
     # Json (responde) -> {"novo_frete", "novo_preco"}
-    path("cart/remove", views.remove_from_cart),
+    path("cart/remove", views.remove_from_cart, name="remove_from_cart"),
 
 
 
@@ -149,7 +152,8 @@ urlpatterns = [
     # nem sei se vamos implementar uma logica mais complexa, mas fica o aviso
     # Json (request) -> {"user_id"}, Nao rpecisa dos produtos, o sistema pega o carrinho de compras direto
 
-    path("comprar-carrinho/<int:user_id>", views.comprar_carrinho),
+    # path("comprar-carrinho/<int:user_id>", views.comprar_carrinho),
+    path("compra-carrinho/", views.compra_carrinho, name="compra_carrinho"),
 
 
     # O id de usuario sera puxado da session

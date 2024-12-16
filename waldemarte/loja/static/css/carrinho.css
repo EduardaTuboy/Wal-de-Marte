@@ -106,3 +106,28 @@
 .cart-summary button:hover {
     background-color: var(--cor-secundaria);
 }
+
+.removeButton {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.removeButton:hover {
+    background-color: #d9363e;
+}
+
+.empty-cart {
+    font-size: 2rem;
+    font-weight: bold;
+    justify-self: center;
+    color: var(--cor-branco);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    margin-top: 2rem;
+}
