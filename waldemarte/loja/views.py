@@ -46,7 +46,7 @@ def login(request : HttpRequest):
         try:
             user = Comprador.authenticate(email, senha)
         except Comprador.DoesNotExist:
-            messages.error(request, "Login invalido")
+            # messages.error(request, "Login invalido")
             return redirect(request, "login.html")
 
         if user is not None:
@@ -57,7 +57,7 @@ def login(request : HttpRequest):
             request.session["user"] = model_to_dict(user)
             return redirect("index")
         else:
-            messages.error(request, "Login invalido")
+            # messages.error(request, "Login invalido")
             return redirect(request, "login.html")
     # se a requisiçao for GET, retorna a pagina de login
     messages.error(request, "")
@@ -72,7 +72,7 @@ def register(request):
         confirm_password = request.POST.get("confirm_password")
         
         if password != confirm_password:
-            messages.error(request, "As senhas não coincidem.")
+            # messages.error(request, "As senhas não coincidem.")
             return render(request, "register.html")
 
         c = Comprador(
@@ -84,7 +84,7 @@ def register(request):
         Endereco.default(c).save()
         request.session["user"] = model_to_dict(c)
         return redirect("index")
-    messages.error(request, "")
+    # messages.error(request, "")
     return render(request, "register.html")
 
 
@@ -334,7 +334,7 @@ def add_to_cart(request: HttpRequest):
             cart.save()
 
             # Mensagem de sucesso
-            messages.success(request, f"Produto '{produto.nome}' foi adicionado ao carrinho!")
+            # messages.success(request, f"Produto '{produto.nome}' foi adicionado ao carrinho!")
             return redirect("get_cart")  # Redireciona para a página do carrinho
 
         except Produto.DoesNotExist:
@@ -369,7 +369,7 @@ def remove_from_cart(request: HttpRequest):
             cart.preco_final -= produto.preco
             cart.save()
 
-            messages.success(request, f"Produto '{produto.nome}' removido do carrinho.")
+            # messages.success(request, f"Produto '{produto.nome}' removido do carrinho.")
             return redirect("get_cart")  # Redireciona de volta para o carrinho
 
         except (Produto.DoesNotExist, CarrinhoDeCompras.DoesNotExist):
