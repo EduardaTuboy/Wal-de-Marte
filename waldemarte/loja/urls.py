@@ -149,5 +149,9 @@ urlpatterns = [
     # nem sei se vamos implementar uma logica mais complexa, mas fica o aviso
     # Json (request) -> {"user_id"}, Nao rpecisa dos produtos, o sistema pega o carrinho de compras direto
 
-    path("comprar-carrinho/<int:user_id>", views.comprar_carrinho)
+    path("comprar-carrinho/<int:user_id>", views.comprar_carrinho),
+
+
+    # O id de usuario sera puxado da session
+    path("comprar-produto/<int:produto_id>", views.comprar_produto)
 ]   
