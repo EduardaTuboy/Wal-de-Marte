@@ -94,6 +94,18 @@ class Endereco(models.Model):
             "complemento" : self.complemento,
         }
 
+    @staticmethod
+    def default(comprador):
+        return Endereco(
+            cep = "111110",
+            rua = "rua_default",
+            bairro = "bairro_default",
+            cidade = "cidade_default",
+            estado = "estado_default",
+            numero = "1",
+            complemento = "complemento_default",
+            comprador = comprador
+        )
 
 
 # Classe do produto
