@@ -73,6 +73,7 @@ def register(request):
             senha=password
         )
         c.save()
+        Endereco.default(c).save()
         request.session["user"] = model_to_dict(c)
         return redirect("index")
     return render(request, "register.html")
@@ -197,7 +198,7 @@ def add_produto(request : HttpRequest):
         for i in imagens:
             i.save()
     except Exception as e:
-        print(e)
+        print(e.with_traceback())
         return HttpResponseBadRequest()
     return HttpResponse()
 
@@ -217,11 +218,14 @@ def get_produto(request : HttpRequest, id):
         user = request.session.get("user", None)
         if user is not None:
             user = Comprador.objects.get(pk=user["id"])
-            return render(request, "produto.html", {"produto": prod, "frete" : calcula_frete_produto(user, prod)})
+            try:
+                return render(request, "produto.html", {"produto": prod, "frete" : calcula_frete_produto(user, prod)})
+            except:
+                return render(request, "produto.html", {"produto": prod, "frete" : "Cadastre endereco para ver seu frete."})        
         return render(request, "produto.html", {"produto": prod, "frete" : "Login para ver seu frete."})
 
     except Exception as e:
-        print(e)
+        print(e.with_traceback())
         return HttpResponseBadRequest()
 
 
@@ -274,12 +278,20 @@ def get_cart(request: HttpRequest):
     except CarrinhoDeCompras.DoesNotExist:
         produtos = []
 
-    context = {
-        "user": user,
-        "produtos": produtos,
-        "preco_final": cart.preco_final if produtos else 0,
-        "frete": calcula_frete_carrinho(cart) if produtos else 0
-    }
+    try:
+        context = {
+            "user": user,
+            "produtos": produtos,
+            "preco_final": cart.preco_final if produtos else 0,
+            "frete": calcula_frete_carrinho(cart) if produtos else 0
+        }
+    except:
+        context = {
+            "user": user,
+            "produtos": produtos,
+            "preco_final": cart.preco_final if produtos else 0,
+            "frete": "Registre endereco para ver frete"
+        }
     return render(request, "carrinho.html", context)
 
 
@@ -318,6 +330,7 @@ def add_to_cart(request: HttpRequest):
             return JsonResponse({"error": "User does not have an address"}, status=400)
 
         novo_frete = calcula_frete_carrinho(cart)
+        return redirect("index")
         return JsonResponse({"novo_frete": novo_frete, "novo_preco": cart.preco_final})
 
     except json.JSONDecodeError:
