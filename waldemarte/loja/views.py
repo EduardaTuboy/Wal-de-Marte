@@ -21,10 +21,6 @@ from .models import *
 # TODO : index,
 #        fazer autenticaçao de senha
 
-
-
-
-
 def index(request : HttpRequest):
     if not Produto.objects.exists():
         initDefaultDB()
@@ -47,8 +43,11 @@ def login(request : HttpRequest):
         email = request.POST["email"]
         senha = request.POST["senha"]
          
-        # Autenticacao feita, nao se ao certo qq precisa p login
-        user = Comprador.authenticate(email, senha)
+        try:
+            user = Comprador.authenticate(email, senha)
+        except Comprador.DoesNotExist:
+            messages.error(request, "Login invalido")
+            return redirect(request, "login.html")
 
         if user is not None:
             #login(request, user)
