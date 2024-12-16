@@ -95,7 +95,13 @@ def carrinho(request : HttpRequest):
         return redirect("login")
     return render(request, "carrinho.html", {"user" : user})
 
-# TODO : verificacao mais robusta nas funcoes de criacao
+
+def compra(request : HttpRequest):
+    user = request.session.get("user", None)
+    if user is None:
+        return redirect("login")
+    return render(request, "compra.html", {"user" : user})
+
 def criar_comprador(request : HttpRequest):
     args = json.loads(request.body) 
     try:

@@ -15,6 +15,8 @@ urlpatterns = [
 
     path("perfil/", views.perfil, name="perfil"),
 
+    path("compra/", views.compra, name="compra"),
+
 
 
     # Salva um comprador na base de dados
