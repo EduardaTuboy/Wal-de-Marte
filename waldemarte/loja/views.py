@@ -54,10 +54,12 @@ def login(request : HttpRequest):
             messages.error(request, "Login invalido")
             return redirect(request, "login.html")
     # se a requisiçao for GET, retorna a pagina de login
+    messages.error(request, "")
     return render(request, "login.html")
 
 
 def register(request):
+    
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
@@ -76,6 +78,7 @@ def register(request):
         Endereco.default(c).save()
         request.session["user"] = model_to_dict(c)
         return redirect("index")
+    messages.error(request, "")
     return render(request, "register.html")
 
 
@@ -457,8 +460,6 @@ def comprar_produto(request: HttpRequest, produto_id):
         print(e)
         return HttpResponseBadRequest("Erro ao acessar página de compra.")
 
-
-
 def realizar_compra(request: HttpRequest):
     if request.method == "POST":
         try:
@@ -466,24 +467,43 @@ def realizar_compra(request: HttpRequest):
             session_user = request.session.get("user", None)
             if session_user is None:
                 return redirect("login")
-            
+
             # Obtém os IDs dos produtos do formulário
-            produtos_ids = request.POST.getlist("produtos_ids")
+            produtos_ids = request.POST.getlist("produtos_ids")  # Lista de IDs enviada
+            
+            # Log para depuração
+            print("Produtos enviados (lista):", produtos_ids)
+
+            # Verifica se a lista de IDs está vazia
+            if not produtos_ids:
+                return HttpResponseBadRequest("Nenhum produto foi selecionado para compra.")
+
+            # Filtra os produtos com base nos IDs
             produtos = Produto.objects.filter(pk__in=produtos_ids)
             
-            # Verifica se os produtos existem
+            # Verifica se os produtos foram encontrados
             if not produtos.exists():
-                return HttpResponseBadRequest("Produtos não encontrados.")
+                return HttpResponseBadRequest("Nenhum produto correspondente encontrado no banco de dados.")
 
             # Obtém o comprador
             user = Comprador.objects.get(pk=session_user["id"])
 
             # Registra transações para cada produto
             for produto in produtos:
-                transacao = Transacao.registrar_produto(user, produto)
-                transacao.save()
-                notif.notificarCompraComprador(transacao)
-                notif.notificarCompraVendedor(transacao)
+                print(f"Processando produto: {produto.nome} (ID: {produto.id})")
+                try:
+                    transacao = Transacao.registrar_produto(user, produto)
+                    print("Transação registrada com sucesso.")
+                except Exception as e:
+                    print(f"Erro ao registrar transação para o produto {produto.id}: {e}")
+                    raise e
+                try:
+                    notif.notificarCompraComprador(transacao)
+                    notif.notificarCompraVendedor(transacao)
+                    print("Notificações enviadas com sucesso.")
+                except Exception as e:
+                    print(f"Erro ao enviar notificações para o produto {produto.id}: {e}")
+                    raise e
 
             # Redireciona para a página de venda concluída
             return redirect("vendaConcluida")
@@ -491,7 +511,7 @@ def realizar_compra(request: HttpRequest):
         except Comprador.DoesNotExist:
             return redirect("login")
         except Exception as e:
-            print(e)
+            print("Erro durante a compra:", e)
             return HttpResponseBadRequest("Erro ao realizar a compra.")
     else:
         return redirect("index")

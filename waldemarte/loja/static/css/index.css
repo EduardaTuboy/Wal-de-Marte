@@ -2,9 +2,9 @@
 .content{
     display: flex;
     flex-direction: column;
-    height: 100%;
     background-color: var(--cor-primaria);
     font-family: var(--fonte-texto);
+    min-height: 100vh;
 }
 
 .content h2{
