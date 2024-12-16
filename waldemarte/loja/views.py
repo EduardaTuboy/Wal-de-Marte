@@ -340,28 +340,6 @@ def add_to_cart(request: HttpRequest):
         return HttpResponseBadRequest("Método não permitido.")
 
 
-    
-# def remove_from_cart(request : HttpRequest):
-#     args = json.loads(request.body)
-#     user = Comprador.objects.get(pk=args["user_id"])
-#     produto = Produto.objects.get(pk=args["produto_id"])
-#     cart = CarrinhoDeCompras.objects.get(comprador_id=args["user_id"]) 
-#     cart.produtos.remove(produto)
-#     produto.carrinhodecompras_set.remove(cart)
-#     cart.preco_final -= produto.preco
-#     cart.save()
-#     produto.save()
-#     return HttpResponse(json.dumps({"novo_frete" : calcula_frete_carrinho(cart),
-#                                     "novo_preco" : cart.preco_final
-#                                     }),
-#                                     content_type="application/json")
-
-
-    
-
-
-
-
 def remove_from_cart(request: HttpRequest):
     if request.method == "POST":
         try:
@@ -426,20 +404,6 @@ def compra_carrinho(request: HttpRequest):
             return HttpResponseBadRequest("Erro ao processar a compra.")
     else:
         return redirect("index")
-
-
-
-
-# def comprar_carrinho(request, user_id):
-#     carrinho = CarrinhoDeCompras.objects.filter(comprador_id = user_id)[0]
-#     transacoes = Transacao.registrar_carrinho(carrinho)
-#     carrinho.clear()
-#     # Nao eh mto elegangte para varios produtos, mas funciona
-#     for t in transacoes:
-#         notif.notificarCompraComprador(t)
-#         notif.notificarCompraVendedor(t)
-#     return render(request, "index.html")
-
 
 
 def comprar_produto(request: HttpRequest, produto_id):
@@ -515,47 +479,3 @@ def realizar_compra(request: HttpRequest):
             return HttpResponseBadRequest("Erro ao realizar a compra.")
     else:
         return redirect("index")
-
-
-
-# def compra(request: HttpRequest, produto_id):
-#     try:
-#         # Verifica se o usuário está logado
-#         user = request.session.get("user", None)
-#         if user is None:
-#             return redirect("login")
-
-#         # Obtém o produto pelo ID
-#         produto = Produto.objects.get(pk=produto_id)
-
-#         if request.method == "POST":
-#             # Finalizar a compra, se necessário
-#             # Aqui você pode adicionar lógica de processamento de compra
-#             return redirect("vendaConcluida")
-
-#         # Renderiza a página de compra
-#         return render(request, "compra.html", {"produto": produto, "user": user})
-#     except Produto.DoesNotExist:
-#         return HttpResponseBadRequest("Produto não encontrado.")
-#     except Exception as e:
-#         print(e)
-#         return HttpResponseBadRequest("Erro ao acessar página de compra.")
-
-
-
-# def comprar_produto(request : HttpRequest, produto_id):
-#     produto = Produto.objects.get(pk=produto_id)
-#     session_user = request.session.get("user", None)
-#     if session_user is None:
-#         return redirect("login")
-#     try : 
-#         user = Comprador.objects.get(pk=session_user["id"]) 
-#     except Comprador.DoesNotExist as e:
-#         print(e.with_traceback())
-#         return redirect("login")
-#     transacao = Transacao.registrar_produto(user, produto)
-#     transacao.save()
-#     notif.notificarCompraComprador(transacao)
-#     notif.notificarCompraVendedor(transacao)
-#     redirect("index")
-

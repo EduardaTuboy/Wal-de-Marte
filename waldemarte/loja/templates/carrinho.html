@@ -29,7 +29,7 @@
                 <h2>Resumo da compra</h2>
                 <p>Produtos: R${{ preco_final|floatformat:2 }}</p>
                 <p>Frete(s): R${{ frete|floatformat:2 }}</p>
-                <p class="total">Total: R${{ preco_final|add:frete }}</p>
+                <p class="total">Total: R${{ preco_final|add:frete|floatformat:2 }}</p>
             
                 <form action="{% url 'compra_carrinho' %}" method="POST">
                     {% csrf_token %}
