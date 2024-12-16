@@ -74,16 +74,18 @@ def register(request):
         if password != confirm_password:
             # messages.error(request, "As senhas não coincidem.")
             return render(request, "register.html")
-
-        c = Comprador(
-            nome=request.POST.get("username"),
-            email=email,
-            senha=password
-        )
-        c.save()
-        Endereco.default(c).save()
-        request.session["user"] = model_to_dict(c)
-        return redirect("index")
+        try:
+            c = Comprador(
+                nome=request.POST.get("username"),
+                email=email,
+                senha=password
+            )
+            c.save()
+            Endereco.default(c).save()
+            request.session["user"] = model_to_dict(c)
+            return redirect("index")
+        except Exception as e:
+            print(e.with_traceback())
     # messages.error(request, "")
     return render(request, "register.html")
 

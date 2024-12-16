@@ -11,7 +11,7 @@ import json
 # Usuario abstrato, serve como base do vendedor e comprador
 class AbstractUsuario(models.Model):
     nome = models.CharField(max_length=20)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     telefone = models.CharField(max_length=20, blank=True)
     cpf = models.CharField(max_length=15, blank=True)
     senha = models.CharField(max_length=254, blank=True) # TODO : implementar autenticacao
