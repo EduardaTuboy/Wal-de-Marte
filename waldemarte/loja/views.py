@@ -47,7 +47,7 @@ def login(request : HttpRequest):
             user = Comprador.authenticate(email, senha)
         except Comprador.DoesNotExist:
             messages.error(request, "Login invalido")
-            return redirect(request, "login.html")
+            return redirect("login")
 
         if user is not None:
             #login(request, user)
@@ -58,7 +58,7 @@ def login(request : HttpRequest):
             return redirect("index")
         else:
             messages.error(request, "Login invalido")
-            return redirect(request, "login.html")
+            return redirect("login")
     # se a requisiçao for GET, retorna a pagina de login
     messages.error(request, "")
     return render(request, "login.html")
