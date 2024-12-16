@@ -12,9 +12,9 @@ import json
 class AbstractUsuario(models.Model):
     nome = models.CharField(max_length=20)
     email = models.EmailField()
-    telefone = models.CharField(max_length=20, null=True, blank=True)
-    cpf = models.CharField(max_length=15, null=True, blank=True)
-    senha = models.CharField(max_length=254, null=True, blank=True) # TODO : implementar autenticacao
+    telefone = models.CharField(max_length=20, blank=True)
+    cpf = models.CharField(max_length=15, blank=True)
+    senha = models.CharField(max_length=254, blank=True) # TODO : implementar autenticacao
     # Transacoes : Classe implementada (One to Many)
     class Meta:
         abstract = True
@@ -134,7 +134,7 @@ class Produto(models.Model):
     
 # Imagem de um produto
 class ImagemProduto(models.Model):
-    img_url = models.CharField(max_length=254)
+    img_url = models.TextField()
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
@@ -210,6 +210,15 @@ class Transacao(models.Model):
             t.save()
             transacao_list.append(t)
         return transacao_list
+
+    @staticmethod
+    def registrar_produto(user, produto):
+        return Transacao(
+            comprador = user,
+            vendedor = produto.vendedor,
+            produto = produto,
+            preco = produto.preco
+        )   
             
 
 

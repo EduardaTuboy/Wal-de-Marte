@@ -375,3 +375,20 @@ def comprar_carrinho(request, user_id):
     return render(request, "index.html")
 
 
+
+def comprar_produto(request : HttpRequest, produto_id):
+    produto = Produto.objects.get(pk=produto_id)
+    session_user = request.session.get("user", None)
+    if session_user is None:
+        return redirect("login")
+    try : 
+        user = Comprador.objects.get(pk=session_user["id"]) 
+    except Comprador.DoesNotExist as e:
+        print(e.with_traceback())
+        return redirect("login")
+    transacao = Transacao.registrar_produto(user, produto)
+    transacao.save()
+    notif.notificarCompraComprador(transacao)
+    notif.notificarCompraVendedor(transacao)
+    redirect("index")
+
